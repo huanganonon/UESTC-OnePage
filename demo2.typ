@@ -22,6 +22,7 @@
 #set page(
   width: real-width,
   height: real-height,
+  columns: 2, // 双栏布局
   margin: (
     top: safe-top, // 关键：不设顶部边距
     bottom: safe-bottom,
@@ -84,7 +85,7 @@
     fill: none,
     // stroke: none,
     [   // 这里写顶部速记内容，如关键公式
-      *`E = mc²`*  #text(fill: red)[易错]
+      *`E = mc²`*  #text(fill: red)[易错]测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试
     ],
   ),
 )
