@@ -143,7 +143,7 @@
   #box(width: 43pt)
   $ln(1+x) = x - x^2/2 + x^3/3 - dots$
   #box(width: 43pt)
-  $(1+x)^alpha = 1 + alpha x + $
+  $(1+x)^alpha = 1 + alpha x +$
   #box(width: 43pt)
   $frac(alpha(alpha-1), 2!) x^2 + dots$
 ]
