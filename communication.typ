@@ -17,6 +17,7 @@
 
 // ========== 再次细致配置距离 ==========
 #let name-top = 37mm           // 姓名书写位置下方
+#let name-top-up = 33mm        // 姓名书写位置下方
 #let seal-left = 120mm         // 印章左所在位置
 #let attention-top = 58mm      // 注意事项上所在位置
 #let title-left = 59mm         // 标题左与左边距离
@@ -67,7 +68,7 @@
 )
 
 // 辅助函数:画绿色虚线矩形,表示预印区域
-#let draw-stamp-box() = {
+#let draw-stamp-box(content) = {
   place(
     // !这里绘制区域时是在设置的页边距基础上定位的
     dx: stamp-left - safe-left,
@@ -77,16 +78,69 @@
       width: stamp-width,
       height: stamp-height,
       fill: none,
+      inset: 0em,
+      outset: 0em,
       stroke: (dash: "dashed", paint: green, thickness: 0.5pt),
       [
-        *预印区域*测试abc
+        #content
       ],
     ),
   )
 }
 
 // 在文档中调用一次,画框
-#draw-stamp-box()
+#draw-stamp-box([])
+
+#place(
+  dx: 0mm,
+  dy: 0mm,
+  clearance: 0em,
+  rect(
+    width: title-left - safe-left,
+    height: name-top-up - safe-top, // 留出一点空隙
+    fill: none,
+    stroke: (dash: "dashed", paint: blue, thickness: 0.4pt),
+    inset: 0pt,
+    outset: 0pt,
+    [
+      a
+    ],
+  ),
+)
+
+#place(
+  dx: title-right - safe-left,
+  dy: 0mm,
+  clearance: 0em,
+  rect(
+    width: title-left - safe-left,
+    height: name-top-up - safe-top, // 留出一点空隙
+    fill: none,
+    stroke: (dash: "dashed", paint: blue, thickness: 0.4pt),
+    inset: 0pt,
+    outset: 0pt,
+    [
+      a
+    ],
+  ),
+)
+
+#place(
+  dx: 0mm,
+  dy: name-top - safe-top,
+  clearance: 0em,
+  rect(
+    width: seal-left,
+    height: attention-top - name-top, // 留出一点空隙
+    fill: none,
+    stroke: (dash: "dashed", paint: blue, thickness: 0.4pt),
+    inset: 0pt,
+    outset: 0pt,
+    [
+
+    ],
+  ),
+)
 
 // 顶部小区域(放在说明文字上方)
 #let top-area-y = 2mm             // 顶部小框距纸顶的微调距离
@@ -96,16 +150,17 @@
 #place(
   dx: 0mm,
   dy: 0mm,
+  clearance: 0em,
   rect(
     width: content-width,
     height: stamp-top - safe-top - 1mm, // 留出一点空隙
     fill: none,
-    stroke: 0.3pt,
+    stroke: (dash: "dashed", paint: blue, thickness: 0.4pt),
     inset: 0pt,
     outset: 0pt,
 
     [   // 这里写顶部速记内容,如关键公式
-      *瑞利与莱斯PDF/CDF图像特征*；*基带*理想低通传输 $B = R_s/2$,对于NRZ则$B = R_s$,对于升余弦则$B = (1 + alpha) R_s/2$,但是一般涉及到SNR都是频带,即基带的两倍
+      // *瑞利与莱斯PDF/CDF图像特征*；*基带*理想低通传输 $B = R_s/2$,对于NRZ则$B = R_s$,对于升余弦则$B = (1 + alpha) R_s/2$,但是一般涉及到SNR都是频带,即基带的两倍
     ],
   ),
 )
