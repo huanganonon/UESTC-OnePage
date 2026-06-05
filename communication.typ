@@ -14,6 +14,15 @@
 #let stamp-left = 21mm         // 说明文字左边界到纸左的距离
 #let stamp-right = 172mm       // 说明文字右边界到纸左的距离
 
+
+// ========== 再次细致配置距离 ==========
+#let name-top = 37mm           // 姓名书写位置下方
+#let seal-left = 120mm         // 印章左所在位置
+#let attention-top = 58mm      // 注意事项上所在位置
+#let title-left = 59mm         // 标题左与左边距离
+#let title-right = 134mm       // 标题右与左边距离
+
+
 // 计算方便使用的值
 #let stamp-height = stamp-bottom - stamp-top
 #let stamp-width = stamp-right - stamp-left
@@ -43,12 +52,12 @@
   ),
   size: 7pt,
   hyphenate: true,
-  costs: (hyphenation: 100%, runt: 0%, widow: 0%, orphan: 0%)
+  costs: (hyphenation: 100%, runt: 0%, widow: 0%, orphan: 0%),
 )
-// 数学字体微调，设置无衬线字体
+// 数学字体微调,设置无衬线字体
 #show math.equation: set text(font: (
   "Fira Math",
-  "Source Han Sans", // 建议配合黑体，保持整体无衬线风格一致
+  "Source Han Sans", // 建议配合黑体,保持整体无衬线风格一致
 ))
 
 // ========== 其他样式设定(如颜色、行距等) ==========
@@ -63,6 +72,7 @@
     // !这里绘制区域时是在设置的页边距基础上定位的
     dx: stamp-left - safe-left,
     dy: stamp-top - safe-top,
+    clearance: 0em,
     rect(
       width: stamp-width,
       height: stamp-height,
@@ -93,17 +103,37 @@
     stroke: 0.3pt,
     inset: 0pt,
     outset: 0pt,
-    // stroke: none,
+
     [   // 这里写顶部速记内容,如关键公式
       *瑞利与莱斯PDF/CDF图像特征*；*基带*理想低通传输 $B = R_s/2$,对于NRZ则$B = R_s$,对于升余弦则$B = (1 + alpha) R_s/2$,但是一般涉及到SNR都是频带,即基带的两倍
     ],
   ),
 )
 
+// #place(
+//   dx: stamp-left - 10mm,
+//   dy: stamp-top - safe-top,
+// )[
+//   #rotate(90deg, origin: top + left)[
+//     #image("figures/抗窄带干扰.pdf", width: 33%)
+//   ]
+// ]
+
 // 跳过预印区,主正文从说明文字下方开始
 // !注意:这里的高度是从 safe-top 开始计算的,因为 page 的 margin 已经设置了 safe-top 了
 #block(height: stamp-bottom - safe-top)
 // 这里可以放置正文内容
+
+// 定义颜色常量（方便后续统一修改）
+#let my-red = rgb("#d9383a")
+#let my-blue = rgb("#2b6cb0")
+#let my-green = rgb("#38a169")
+
+// 定义快速调用的函数
+#let alert(content) = text(fill: my-red, [#content])
+#let info(content) = text(fill: my-blue, content)
+#let success(content) = text(fill: my-green, content)
+
 
 
 #columns(
@@ -167,13 +197,36 @@
 
   【*CP机制*】为了消除#text(rgb("#d9383a"))[码间干扰(ISI)]与 ICI,在时域符号前插入保护间隔,若直接填零(ZP)会导致子载波正交性破坏从而引发 ICI.必须采用#text(rgb("#2b6cb0"))[循环前缀(CP)],即复制时域符号尾部的最后 $N_("cp")$ 个采样点垫到头部,其关键边界隐含条件为#text(rgb("#d9383a"))[CP 长度 $tau_("cp")$ 必须大于信道最大多径时延扩展 $tau_(max)$]. 带 CP 的 OFDM 符号总周期变为 $T_("total") = T + tau_("cp")$,由于多径引起的时延混叠只污染 CP 段,使得在 FFT 窗口内时域卷积完全转化为#text(rgb("#38a169"))[频域乘积积分 $Y(n) = H(n)X(n) + W(n)$].
 
-  【*信道估计和PAPR*】#text(rgb("#2b6cb0"))[块状导频]频率上连续,#text(rgb("#2b6cb0"))[梳状导频]时间上连续.#text(rgb("#d9383a"))[峰均比 PAPR],定义公式为 $"PAPR" = max(|s(t)|^2) / E(|s(t)|^2)$,当子载波数 $N$ 很大时时域信号近似服从高斯分布.抑制 PAPR 核心方法对比:#text(rgb("#2b6cb0"))[限幅]限制峰值附近信号幅度,实现简单但破坏正交性,且带外干扰;#text(rgb("#2b6cb0"))[编码]增加冗余,选择小PAPR码字,无失真但谱效降低且复杂度高；#text(rgb("#2b6cb0"))[加扰]用扰码降低信号同相叠加概率,无失真但需要额外信息且复杂度高;#text(rgb("#2b6cb0"))[预失真]进入放大器之前预先补偿失真,让放大之后无失真，本质没有抑制PAPR,补偿程度有限.
+  【*信道估计和PAPR*】#text(rgb("#2b6cb0"))[块状导频]频率上连续,#text(rgb("#2b6cb0"))[梳状导频]时间上连续.#text(rgb("#d9383a"))[峰均比 PAPR],定义公式为 $"PAPR" = max(|s(t)|^2) / E(|s(t)|^2)$,当子载波数 $N$ 很大时时域信号近似服从高斯分布.抑制 PAPR 核心方法对比:#text(rgb("#2b6cb0"))[限幅]限制峰值附近信号幅度,实现简单但破坏正交性,且带外干扰;#text(rgb("#2b6cb0"))[编码]增加冗余,选择小PAPR码字,无失真但谱效降低且复杂度高；#text(rgb("#2b6cb0"))[加扰]用扰码降低信号同相叠加概率,无失真但需要额外信息且复杂度高;#text(rgb("#2b6cb0"))[预失真]进入放大器之前预先补偿失真,让放大之后无失真,本质没有抑制PAPR,补偿程度有限.
 
   【*OFDM优缺点*】#text(rgb("#38a169"))[核心优点]:正交子载波频谱重叠交叉使频谱利用率极高;串并转换减小符号速率,抗多径干扰与抗窄带衰落能力强;FFT/IFFT实现降低复杂度;CP克服多径带来的ISI;获取等效频率单径信道;降低对时间同步的要求.#text(rgb("#d9383a"))[致命缺点]:频偏敏感,频偏容易使得正交性被破坏;高PAPR,多个子信道叠加,对器件要求高
 
   #line(length: 100%, stroke: 0.5pt)
 
-  
+  【*分集概念*】*本质*:对同一信号在不同时间频率空间和极化方向的采样 *概念*:利用加性独立(或不相关)的衰落路径传送相同的信号并合并,从而提高接收信号的信噪比 *原理*:信号在多个独立路径传播,各个独立信号同时经历深衰落概率低 *作用*:接收端充分利用信号能量,提高接收信噪比 (SNR),减小平坦性衰落的深度和持续时间
+
+  【*分集种类*】微观 *时间*:信息在不同时刻重复$Delta T>>T_C$ *频率*:信息以不同频率传输 $Delta f >> B_C$ *空间*: *角度*(波束方向,天线不相关)*极化*(水平和垂直极化相关性)$Delta x >> D_C$
+
+  【*分集合并*】各支路独立且信号与噪声无关,有相同的*平均信噪比*$xi_k=overline(xi)$ *最大比*:调整同相后按SNR加权合并$alpha_k = C r_k / N_k prop r_k / N_k$,合并后 $xi_("MRC") = sum_(k=1)^M xi_k=M overline(xi)$,$D_("MRC") = overline(xi_("mr"))/overline(xi)=M$ *等增益*:所有分支权重相等,$xi_("EGC") = [1+(M-1) pi/4]overline(xi)$ *选择*:选择SNR最大的分支(任意时刻和频率等)$xi_("SC")=overline(xi) sum_(k=1)^M 1/k$
+
+  【*交织*】*概念*:一条消息中的比特以非连续方式传送,使突发差错信道变为离散信道(将突发错误随机化),便于利用纠错码消除随机错 *行列交织器*:m行n列,#alert([按行写入,按列读出]),#info([交织深度M,交织宽度N,交织延迟M$dot$N]) *要求*: #alert([交织深度$>>$相干时间]),交织深度对应实际时间$M times T_S ("符号周期")$
+
+  【*行列交织器优缺点*】*优点*:抗突发误码能力强,结构简单易实现;*缺点*:交织时延大,存储开销大(可引入卷积交织器)
+
+  【*信道编码概念*】*定义*:信息码元中增加冗余码元,在接收端检测或纠正有噪信道中引入的误码 *码率*:$R = k/n$ *码距*
+  【*线性分组码*】$(n,k)$ 循环码(CRC)$x^(n-k)m(x)$,汉明码
+
+  【*卷积码*】$(n,k,m)$ $m$寄存器个数,状态数$2^m$ *约束长度*$l=m+1$ *多项式编码*:$g^((1))(D)=1+D+D^2,g^((2))(D)=1+D^2$ *Vterbi译码*:一种最大似然序列译码,运算量和存贮量都与状态数呈线性关系
+
+  【*线性均衡器*】$y_n = sum_(k=-N)^N c_k x_(n-k) <=> Y(z) = X(z)E(z)$,$X(z) = sum_(k=-N)^N x_k z^(-k)$,$E(z) = sum_(k=-N)^N c_k z^(-k)$,输出$y_n$,输入$x_n$,均衡$c_n$
+
+  【*迫零算法*】*最小峰值误差准则*$D = 1 / y_0 sum_(mat(k = -infinity; k != 0))^infinity |y_k|$ *算法*:$x$代入初始畸变$D_0<1$时,迫零可得到$N$阶下最优解.$y_n = cases(1 &", " n = 0, 0 &", " n = plus.minus 1\, ...\, plus.minus N)$,$quad y = x c => c = x^(-1) y$.N大于多径M
+
+  $y = mat(y_(-N); y_(-N+1); dots.v; y_0; dots.v; y_(N-1); y_N) quad x = mat(x_0, x_(-1), dots.h, x_(-2N); x_1, x_0, dots.h, x_(-2N+1); dots.v, dots.v, , dots.v; x_N, x_(N-1), dots.h, x_(-N); dots.v, dots.v, , dots.v; x_(2N-1), x_(2N-2), dots.h, x_(-1); x_(2N), x_(2N-1), dots.h, x_0) quad c = mat(c_(-N); c_(-N+1); dots.v; c_0; dots.v; c_(N-1); c_N)$
+
+  【*其它均衡*】*均方误差*:$epsilon.alt^2 = 1/y_0^2 sum_(mat(k = -infinity; k != 0))^(infinity)y_k^2$,自适应均方误差定义$overline(epsilon.alt^2)=E[e_k^2]=E[a_k-y_k]$ *自适应均衡*:训练/跟踪模式，单向/选择式单向均衡
+
+
 
 ]
 
