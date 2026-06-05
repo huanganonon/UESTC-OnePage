@@ -42,12 +42,19 @@
     "SimHei",
   ),
   size: 7pt,
+  hyphenate: true,
+  costs: (hyphenation: 100%, runt: 0%, widow: 0%, orphan: 0%)
 )
+// 数学字体微调，设置无衬线字体
+#show math.equation: set text(font: (
+  "Fira Math",
+  "Source Han Sans", // 建议配合黑体，保持整体无衬线风格一致
+))
 
 // ========== 其他样式设定(如颜色、行距等) ==========
 #set par(
   leading: 0.8em, // 行距
-  spacing: 1em,  // 段间距
+  spacing: 1em, // 段间距
 )
 
 // 辅助函数:画绿色虚线矩形,表示预印区域
@@ -164,6 +171,9 @@
 
   【*OFDM优缺点*】#text(rgb("#38a169"))[核心优点]:正交子载波频谱重叠交叉使频谱利用率极高;串并转换减小符号速率,抗多径干扰与抗窄带衰落能力强;FFT/IFFT实现降低复杂度;CP克服多径带来的ISI;获取等效频率单径信道;降低对时间同步的要求.#text(rgb("#d9383a"))[致命缺点]:频偏敏感,频偏容易使得正交性被破坏;高PAPR,多个子信道叠加,对器件要求高
 
+  #line(length: 100%, stroke: 0.5pt)
+
+  
 
 ]
 
