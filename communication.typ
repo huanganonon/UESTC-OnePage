@@ -289,5 +289,15 @@
 
   【*FH*】*概念*:载波信号的频率随时间变化,#info([靠躲避干扰来提升抗干扰性能]),本质是频率分集 *参数*:$G_H = W/B = N$即跳频点数 *抗衰落*:#alert([抗频率选择性失真])在多径信号没有到来之前接收机已开始接收下一跳信号,但需以提高跳频速率为代价(快跳频) #alert([抗SNR损耗])跳频总带宽大于信道相干带宽时,若将相关的跳频频点作为一个跳频子集,不同跳频子集的信号相互独立(#info([跳频频率间隔大于信道相干带宽])),可获得频率分集,具有分集合并增益 #info([抗同信道干扰])正交跳频图案避免复用引起的干扰
 
+  【*空间分集*】对抗衰落;*STBC码字*$mat(c_1, c_2) => mat(c_1, -c_2^*; c_2, c_1^*)$ *等效公式*:$bold(r)=bold(H)bold(c)+bold(n)=mat(r_1; r^*)=mat(h_1, h_2; h_2^*, -h_1^*)mat(c_1; c_2)+mat(n_1; n_2^*)$ *检测*:$tilde(bold(r))=bold(H)^H bold(r)=(|h_1^2|+|h_2^2|)bold(c)+tilde(bold(n))$,再接ML检测 *性能*:#info([分集度])BER曲线斜率,MRC与STBC相同;#info([分集增益])MRC性能好3dB,但因为#success([非对称性])STBC应用广(MRC永远1Tx多Rx)
+
+  【*空间复用*】提高频谱效率;*V-BLAST*:$bold(r)=bold(H)bold(c)+bold(n)$ *ML*:$tilde(bold(r))=arg min_(hat(bold(c))in bold(C))|bold(r)-bold(H)hat(bold(c))|^2$,需要先验等概+AWGN,最优最复杂
+
+  【*MIMO-OFDM*】MIMO在不增加带宽的条件下成倍提高系统容量和频谱利用率;OFDM把频率选择性衰落信道变成多个子载波的平坦衰落信道,使MIMO在宽带无线通信中发挥其优势
+
+  【*链路自适应技术*】系统依据信道的变化动态地调整系统参数,达到性能的最优 AMC,ARQ/FEC/HARQ
+
+  #line(length: 100%, stroke: 0.5pt)
+
 ]
 
