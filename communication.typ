@@ -54,6 +54,7 @@
   size: 7pt,
   hyphenate: true,
   costs: (hyphenation: 100%, runt: 0%, widow: 0%, orphan: 0%),
+  tracking: -0.5pt, // ! 字符间距：注意字体本身就内含了间距，所以调整为负不会导致字重合
 )
 // 数学字体微调,设置无衬线字体
 #show math.equation: set text(font: (
@@ -64,7 +65,7 @@
 // ========== 其他样式设定(如颜色、行距等) ==========
 #set par(
   leading: 0.8em, // 行距
-  spacing: 1em, // 段间距
+  spacing: 0.6em, // 段间距
 )
 
 // 强行压缩独立公式块的上下外边距，默认值较大，改为 0.4em 甚至更低
@@ -195,15 +196,46 @@
 #let info(content) = text(fill: my-blue, content)
 #let success(content) = text(fill: my-green, content)
 
+// 配置考点框
+#let kp-mix-box(clr, body) = box(
+  // 左边用 2pt 粗线，上、右、下用 0.4pt 超细线，颜色可以用同一个，也可以分明暗
+  stroke: (
+    left: 2pt + clr,
+    top: 0.4pt + clr.lighten(30%),
+    right: 0.4pt + clr.lighten(30%),
+    bottom: 0.4pt + clr.lighten(30%),
+  ),
+  radius: (left: 0pt, right: 1.5pt), // 左边直角对齐条，右边圆角收尾
+  inset: (left: 2pt, right: 0.5pt, y: 1.2pt), // ! box内边距
+  outset: 0pt,
+  baseline: 15%,
+  [*#body*],
+)
+
+
+// ==================== 打印级颜色核心配置 ====================
+// 级别 1：【核心必考 / 超级公式】 - 高警示度朱红色（红偏橘，考场上第一眼看到）
+#let clr-red = rgb("d32f2f")
+
+// 级别 2：【高频考点 / 核心概念】 - 深邃湖蓝色（理智、清晰，适合大段核心知识点）
+#let clr-blue = rgb("0288d1")
+
+// 级别 3：【次要考点 / 补充定义】 - 稳重橄榄绿（不刺眼，用于区分常规概念）
+#let clr-green = rgb("388e3c")
+
+// 级别 4：【普通标记 / 题型分类】 - 暗夜紫罗兰（低调但有高对比度，适合分类标签）
+#let clr-purple = rgb("7b1fa2")
+// =========================================================
+
 
 
 #columns(
   3,
   gutter: 1mm,
 )[
-  【*移动通信*】*广义*:通信双方或至少其中一方在运动状态中(或临时静止状态)进行信息交互的通信方式;采用电磁波为传输媒介的无线通信*狭义*:蜂窝移动通信系统
+  #kp-mix-box(clr-red, [移动通信]) *广义*:通信双方或至少其中一方在运动状态中(或临时静止状态)进行信息交互的通信方式;采用电磁波为传输媒介的无线通信*狭义*:蜂窝移动通信系统
 
-  【*1-4代系统*】*1代(模拟/窄带)* 主多址:FDMA  质量:较差 业务:语音通信  代表:AMPS(美国)、TACS(欧洲)*2代(数字/窄带)*  主多址:FDMA/TDMA/CDMA  质量:较好 业务:语音为主,数字为辅  代表:GSM(欧洲)、IS-95(Qualcomm)*3代(数字/宽带)*多模式多频  主多址:CDMA  质量:好 业务:数字语音多媒体  代表:WCDMA(欧/日)、cdma2000(北美)、TD-SCDMA(中国)*4代(数字/宽带)*  主多址:OFDMA/SC-FDMA  质量:好 业务:数字、语音、多媒体  代表:LTE-A
+  #kp-mix-box(clr-blue, [1-4代系统]) *1代(模拟/窄带)* 主多址:FDMA  质量:较差 业务:语音通信  代表:AMPS(美国)、TACS(欧洲)*2代(数字/窄带)*  主多址:FDMA/TDMA/CDMA  质量:较好 业务:语音为主,数字为辅  代表:GSM(欧洲)、IS-95(Qualcomm)*3代(数字/宽带)*多模式多频  主多址:CDMA  质量:好 业务:数字语音多媒体  代表:WCDMA(欧/日)、cdma2000(北美)、TD-SCDMA(中国)*4代(数字/宽带)*  主多址:OFDMA/SC-FDMA  质量:好 业务:数字、语音、多媒体  代表:LTE-A
 
   *WiMAX和LTE相同技术*:正交频分多址 OFDMA,子信道自适应调制和编码(AMC),混合自动重传请求 (H-ARQ),多输入多输出(MIMO),纯 IP 核心网
 
