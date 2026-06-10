@@ -54,6 +54,7 @@
   size: 7pt,
   hyphenate: true,
   costs: (hyphenation: 100%, runt: 0%, widow: 0%, orphan: 0%),
+  tracking: -0.5pt // ! 字符间距：注意字体本身就内含了间距，所以调整为负不会导致字重合
 )
 // 数学字体微调,设置无衬线字体
 #show math.equation: set text(font: (
@@ -196,11 +197,84 @@
 #let success(content) = text(fill: my-green, content)
 
 
+// 定义一个超紧凑的知识点标签，甚至去掉了两边的内边距（inset: 0pt）
+#let kp(body) = box(
+  fill: rgb("e1f5fe"), 
+  radius: 2pt, 
+  inset: (x: 1pt, y: 1pt), 
+  baseline: 10%,
+  [*#body*]
+)
+
+// 方案 A：超细精致边框（完全不遮挡文字，0外边距）
+#let kp-border(body) = box(
+  stroke: 0.4pt + rgb("00bcd4"), // 使用较细的亮色线条
+  radius: 1.5pt,
+  inset: (x: 1.5pt, y: 1pt),
+  baseline: 10%,
+  [*#body*]
+)
+
+// 方案 B：底部粗滑板线（只在字底下画线，上方完全留白，最省空间）
+#let kp-underline(body) = box(
+  stroke: (bottom: 1.5pt + rgb("ff5722")), // 仅底部有较粗的橘色线
+  inset: (bottom: 1pt, x: 1pt),
+  baseline: 5%,
+  [*#body*]
+)
+
+// 方案 C：左侧定位色条（像个书签标签，适合在一行的开头做视觉锚点）
+#let kp-leftbar(body) = box(
+  stroke: (left: 2pt + rgb("4caf50")), // 仅左侧一根明显的绿条
+  inset: (left: 2pt, right: 1pt, y: 1pt),
+  baseline: 10%,
+  [*#body*]
+)
+
+
+#let kp-mix-box(clr, body) = box(
+  // 左边用 2pt 粗线，上、右、下用 0.4pt 超细线，颜色可以用同一个，也可以分明暗
+  stroke: (
+    left: 2pt + clr,
+    top: 0.4pt + clr.lighten(30%),
+    right: 0.4pt + clr.lighten(30%),
+    bottom: 0.4pt + clr.lighten(30%),
+  ),
+  radius: (left: 0pt, right: 1.5pt), // 左边直角对齐条，右边圆角收尾
+  inset: (left: 2.5pt, right: 1pt, y: 1.5pt), // 左边多留 0.5pt 防止字贴条
+  baseline: 12%,
+  [*#body*]
+)
+
+#let kp-mix-fill(clr, body) = box(
+  fill: clr.lighten(90%), // 极其轻薄的底色，只提供区块感，绝不染黑字体边缘
+  stroke: (left: 2.5pt + clr), // 只有左边有粗条，其他三边无框线
+  radius: (left: 0pt, right: 1pt),
+  inset: (left: 3pt, right: 2pt, y: 1.5pt),
+  baseline: 12%,
+  [*#body*]
+)
+
+
 
 #columns(
   3,
   gutter: 1mm,
 )[
+  #kp-mix-box(red,[移动通信])*广义*:通信双方或至少其中一方在运动状态中(或临时静止状态)进行信息交互的通信方式;采用电磁波为传输媒介的无线通信*狭义*:蜂窝移动通信系统
+
+  #kp-mix-fill(red,[移动通信])*广义*:通信双方或至少其中一方在运动状态中(或临时静止状态)进行信息交互的通信方式;采用电磁波为传输媒介的无线通信*狭义*:蜂窝移动通信系统
+
+  #kp-border([移动通信])*广义*:通信双方或至少其中一方在运动状态中(或临时静止状态)进行信息交互的通信方式;采用电磁波为传输媒介的无线通信*狭义*:蜂窝移动通信系统
+
+  #kp-underline([移动通信])*广义*:通信双方或至少其中一方在运动状态中(或临时静止状态)进行信息交互的通信方式;采用电磁波为传输媒介的无线通信*狭义*:蜂窝移动通信系统
+
+  #kp-leftbar([移动通信])*广义*:通信双方或至少其中一方在运动状态中(或临时静止状态)进行信息交互的通信方式;采用电磁波为传输媒介的无线通信*狭义*:蜂窝移动通信系统
+
+
+  #kp([移动通信])*广义*:通信双方或至少其中一方在运动状态中(或临时静止状态)进行信息交互的通信方式;采用电磁波为传输媒介的无线通信*狭义*:蜂窝移动通信系统
+
+
   【*移动通信*】*广义*:通信双方或至少其中一方在运动状态中(或临时静止状态)进行信息交互的通信方式;采用电磁波为传输媒介的无线通信*狭义*:蜂窝移动通信系统
 
   【*1-4代系统*】*1代(模拟/窄带)* 主多址:FDMA  质量:较差 业务:语音通信  代表:AMPS(美国)、TACS(欧洲)*2代(数字/窄带)*  主多址:FDMA/TDMA/CDMA  质量:较好 业务:语音为主,数字为辅  代表:GSM(欧洲)、IS-95(Qualcomm)*3代(数字/宽带)*多模式多频  主多址:CDMA  质量:好 业务:数字语音多媒体  代表:WCDMA(欧/日)、cdma2000(北美)、TD-SCDMA(中国)*4代(数字/宽带)*  主多址:OFDMA/SC-FDMA  质量:好 业务:数字、语音、多媒体  代表:LTE-A
