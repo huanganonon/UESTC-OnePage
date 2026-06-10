@@ -67,6 +67,12 @@
   spacing: 1em, // 段间距
 )
 
+// 强行压缩独立公式块的上下外边距，默认值较大，改为 0.4em 甚至更低
+#show math.equation.where(block: true): set block(above: 0.3em, below: 0.3em)
+
+// // 如果公式内有分式（如 \frac{\lambda}{2\pi}），控制其行高不把整体撑得太开
+// #show math.equation: set text(features: ("tnum",))
+
 // 辅助函数:画绿色虚线矩形,表示预印区域
 #let draw-stamp-box(content) = {
   place(
@@ -197,8 +203,7 @@
 )[
   【*移动通信*】*广义*:通信双方或至少其中一方在运动状态中(或临时静止状态)进行信息交互的通信方式;采用电磁波为传输媒介的无线通信*狭义*:蜂窝移动通信系统
 
-  【*1-4代系统*】
-  *1代(模拟/窄带)* 主多址:FDMA  质量:较差 业务:语音通信  代表:AMPS(美国)、TACS(欧洲)*2代(数字/窄带)*  主多址:FDMA/TDMA/CDMA  质量:较好 业务:语音为主,数字为辅  代表:GSM(欧洲)、IS-95(Qualcomm)*3代(数字/宽带)*多模式多频  主多址:CDMA  质量:好 业务:数字语音多媒体  代表:WCDMA(欧/日)、cdma2000(北美)、TD-SCDMA(中国)*4代(数字/宽带)*  主多址:OFDMA/SC-FDMA  质量:好 业务:数字、语音、多媒体  代表:LTE-A
+  【*1-4代系统*】*1代(模拟/窄带)* 主多址:FDMA  质量:较差 业务:语音通信  代表:AMPS(美国)、TACS(欧洲)*2代(数字/窄带)*  主多址:FDMA/TDMA/CDMA  质量:较好 业务:语音为主,数字为辅  代表:GSM(欧洲)、IS-95(Qualcomm)*3代(数字/宽带)*多模式多频  主多址:CDMA  质量:好 业务:数字语音多媒体  代表:WCDMA(欧/日)、cdma2000(北美)、TD-SCDMA(中国)*4代(数字/宽带)*  主多址:OFDMA/SC-FDMA  质量:好 业务:数字、语音、多媒体  代表:LTE-A
 
   *WiMAX和LTE相同技术*:正交频分多址 OFDMA,子信道自适应调制和编码(AMC),混合自动重传请求 (H-ARQ),多输入多输出(MIMO),纯 IP 核心网
 
