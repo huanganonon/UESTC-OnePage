@@ -87,7 +87,10 @@
 #show math.lt: it => math.class("normal", it)// 4. 如果你用了其他符号（如 <, >, * ），也可以照葫芦画瓢加上：
 #show math.gt: it => math.class("normal", it)
 #show math.arrow: it => math.class("normal", it)
-
+#show math.approx: it => math.class("normal", it)
+#show math.lt.double: it => math.class("normal", it)
+#show math.gt.double: it => math.class("normal", it)
+#show math.prop: it => math.class("normal", it)
 
 // 辅助函数:画绿色虚线矩形,表示预印区域
 #let draw-stamp-box(content) = {
@@ -273,37 +276,35 @@
   #kp-mix-box(clr-blue, [莱斯衰落]) 多径信道中#info([某路信号较强且占支配地位]).*莱斯因子*:主信号功率与多径分量方差之比,即 $K = A^2/(2 sigma^2)$.$A arrow.r 0$且$K arrow.r 0$时,无直射分量,莱斯分布退化为*瑞利分布*(衰落最严重);$A^2/(2 sigma^2) arrow.r infinity$且$K arrow.r infinity$时,直射波极强,莱斯分布向*高斯分布*趋近(衰落最轻).
   // ? *PDF公式*:当 $r >= 0$ 时, $p(r) = r/sigma^2 exp(-(r^2+A^2)/(2 sigma^2)) I_0((A^2)/sigma^2)$,$r < 0$时$p(r) = 0$.($A$为主信号峰值,其功率$A^2/2$; $r$为包络;$sigma^2$为$r$的方差;$I_0(dot)$为0阶第一类修正贝塞尔函数).
 
-  #kp-mix-box(clr-blue, [时延扩展]) 设各多径分量的附加时延为 $tau_i$,对应接收功率为 $P(tau_i)$.*1.平均附加时延*: #text(rgb("#2b6cb0"))[$overline(tau) = (sum_i a_i^2 tau_i)/(sum_i a_i^2) = (sum_i P(tau_i) tau_i) / (sum_i P(tau_i))$] (功率加权的一阶矩);*2.均方根时延扩展*: #text(rgb("#d9383a"))[$sigma_tau = sqrt(overline(tau^2) - (overline(tau))^2)$],其中二阶矩 #text(rgb("#2b6cb0"))[$overline(tau^2) = (sum_i P(tau_i) tau_i^2) / (sum_i P(tau_i))$] (注意 $overline(tau^2)$ 是先平方再加权平均);*3.考场解题避坑*:若题目给出的功率是分贝形式 $P_("dB")$,*必须先转换回线性功率* $P = 10^(P_("dB")/10)$ 再代入上式计算
+  #kp-mix-box(clr-blue, [时延扩展]) 各多径分量附加时延为$tau_i$,对应接收功率为 $P(tau_i)$.*平均附加时延*:$overline(tau) = (sum_i a_i^2 tau_i)/(sum_i a_i^2) = (sum_i P(tau_i) tau_i) / (sum_i P(tau_i))$;*均方根时延扩展*: $sigma_tau = sqrt(overline(tau^2) - (overline(tau))^2)$,其中$overline(tau^2) = (sum_i P(tau_i) tau_i^2) / (sum_i P(tau_i))$ ($overline(tau^2)$是先平方再加权平均);注意是#info([数值运算])
 
-  【*时间色散 -> 频域波形波动*】多径传播导致时延扩展,测量得平均附加时延 $overline(tau)$ 与均方根时延扩展 $sigma_tau$.信道核心参数为*相干带宽* $B_C$,其定义为信道衰落特性保持高度相关的最大频率范围.严格计算公式 $B_C approx 1 / (2 pi sigma_tau)$,工程近似比例 $B_C prop 1 / sigma_tau$.信号对应参数为*信号带宽* $B_S$.核心判定规则:*1.* 当 #text(rgb("#d9383a"))[$B_S$] $<=$ #text(rgb("#2b6cb0"))[$B_C$] (或符号周期 $T_S >= sigma_tau$)时,信号通过平坦滑梯,各频率衰落一致,产生 #text(rgb("#38a169"))[*平坦衰落(非频率选择性衰落)*],波形不失真;*2.* 当 #text(rgb("#d9383a"))[$B_S$] $>$ #text(rgb("#2b6cb0"))[$B_C$] (或 $T_S < sigma_tau$)时,信号跨越不平坦区,不同频率成分衰落不同导致严重相消,产生 #text(rgb("#d9383a"))[*频率选择性衰落*],其严重后果是引发 #text(rgb("#d9383a"))[*码间干扰(ISI)*] 畸变.
+  #kp-mix-box(clr-red, [时间色散]) #info([多径传播导致时延扩展])#alert([*相干带宽*]):$B_C$定义为#info([信道衰落特性保持高度相关的最大频率范围]).*工程近似*:$B_C approx 1 / (5 sigma_tau) prop 1 / sigma_tau$.*信号参数*:#info([信号带宽])$B_S$#info([符号周期])$T_S$.#alert([*判定*]):$B_S <<  B_C$($T_S >> sigma_tau$)#success([平坦/非频率选择性衰落]) ;$B_S > B_C$($T_S < sigma_tau$)#success([频率选择性衰落]),引发ISI.
 
-  【*频率色散 -> 时域波形变化*】移动导致多普勒频移,最大多普勒频移 $f_m = v / lambda cos theta$,多普勒扩展导致信道冲激响应随时间快速波动.信道核心参数为*相干时间* $T_C$,其定义为信道特性近似固定不变的时间窗.严格计算公式 $T_C approx 0.423 / f_m$,工程近似比例 $T_C prop 1 / f_m$.信号对应参数为*符号周期(码元宽度)* $T_S$.核心判定规则:*1.* 当 #text(rgb("#d9383a"))[$T_S$] $<=$ #text(rgb("#2b6cb0"))[$T_C$] (或信号带宽 $B_S >= f_m$)时,在单码元传输期间信道来不及变,产生 #text(rgb("#38a169"))[*慢衰落(非时间选择性衰落)*],信道增益恒定;*2.* 当 #text(rgb("#d9383a"))[$T_S$] $>$ #text(rgb("#2b6cb0"))[$T_C$] (或 $B_S < f_m$)时,传输单码元时信道已剧变导致波形首尾不一,产生 #text(rgb("#d9383a"))[*快衰落(时间选择性衰落)*],引发 #text(rgb("#d9383a"))[*严重相位畸变与多普勒展宽*].
+  #kp-mix-box(clr-red, [频率色散]) #info([移动导致多普勒频移])多普勒扩展导致信道冲激响应随时间快速波动.#alert([*相干时间*]): $T_C$定义为#info([信道特性近似固定不变的时间窗]).*工程近似*:$T_C approx 0.423 / f_m prop 1 / f_m$.#alert([*判定*]):$T_S << T_C$($B_S >> f_m$)#success([慢/非时间选择性衰落)]),信道增益恒定;$T_S > T_C$($B_S < f_m$)#success([快/时间选择性衰落)]),引发#info([严重相位畸变与多普勒展宽])
 
-  【*角度色散 -> 空域表现异同*】散射体分布导致多角度信号到达接收端,引发空间干涉图样变化.信道核心参数为*相关距离* $D_C$,其定义为信道特性高度相关的空间范围.工程近似比例 $D_C prop 1 / (chevron.l alpha chevron.r)$( $chevron.l alpha chevron.r$ 为角度扩展).系统设计参数为*天线阵列间距* $Delta x$.核心判定规则:*1.* 当 #text(rgb("#d9383a"))[$Delta x$] $<=$ #text(rgb("#2b6cb0"))[$D_C$] 时,两根天线处于同一个空间同质区,接收衰落完全相同,产生*空间非选择性衰落*,天线冗余失效;*2.* 当 #text(rgb("#d9383a"))[$Delta x$] $>$ #text(rgb("#2b6cb0"))[$D_C$] 时,各天线处干涉独立(一根在波峰一根在波谷),产生 #text(rgb("#38a169"))[*空间选择性衰落*]. 这是实现 #text(rgb("#38a169"))[*空间分集与多天线MIMO技术*] 从而对抗多径衰落的物理前提.
+  #kp-mix-box(clr-green, [角度色散]) #info([散射体分布导致多角度信号到达接收端,引发空间干涉图样变化(角度扩展)]).*相关距离*$D_C$定义为信道特性高度相关的空间范围.*天线间距* $Delta x$.*判定*:$Delta x << D_C$*空间非选择性衰落*
 
-  #line(length: 100%, stroke: 0.5pt)
+  【*信源编码*】*核心作用*:通过去除信源的多余冗余来提高通信的有效性,降低传输速率.*主要语音编码分类*:*1.波形编码*(不改变波形,直接对模拟信号抽样、量化、编码;速率 16\~64kbps,质量好但高带宽,典型如 PCM、ADPCM);*2.参数/声码器编码*(提取发音器官物理参数进行传输和重建;速率低达 1.2\~4.8kbps,极省带宽但音质有合成感、合成语意度差,典型如 LPC);*3.混合编码*(波形与参数结合,用参数编码提取特征,用波形编码提取残差;速率 4.8\~16kbps,兼顾低速率与高音质,典型如 CELP、VSELP).
 
-  【*信源编码*】*核心作用*:通过去除信源的多余冗余来#text(rgb("#d9383a"))[提高通信的有效性],降低传输速率.*主要语音编码分类*:*1.波形编码*(不改变波形,直接对模拟信号抽样、量化、编码;速率 #text(rgb("#2b6cb0"))[16\~64kbps],质量好但高带宽,典型如 #text(rgb("#38a169"))[PCM、ADPCM]);*2.参数/声码器编码*(提取发音器官物理参数进行传输和重建;速率低达 #text(rgb("#2b6cb0"))[1.2\~4.8kbps],极省带宽但音质有合成感、合成语意度差,典型如 #text(rgb("#38a169"))[LPC]);*3.混合编码*(波形与参数结合,用参数编码提取特征,用波形编码提取残差;速率 #text(rgb("#2b6cb0"))[4.8\~16kbps],兼顾低速率与高音质,典型如 #text(rgb("#38a169"))[CELP、VSELP]).
+  【*信噪比与其派生指标*】*参数定义*: $S$ 为信号平均功率; $N$ 为总噪声功率; $N_0$ 为单边噪声功率谱密度; $E_b$ 为每比特能量; $E_s$ 为每码元能量; $R_b$ 为比特速率(bps); $R_s$ 为符号传输速率(Baud); $B$ 为接收机信道带宽; $M$ 为多元调制进制数(如QPSK的 $M=4$).*核心折算链公式*:*1.功率与能量*: $S = E_b dot R_b = E_s dot R_s$, $N = N_0 dot B$;*2.三大经典换算*: $S/N = (E_b/N_0) dot (R_b/B)$, $S/N = (E_s/N_0) dot (R_s/B)$, $E_s/N_0 = (E_b/N_0) dot log_2 M$.*隐含条件*:系统未进行信道编码 (码率 $R_c=1$).若有 $R_c$,则 $E_s = E_b dot R_c dot log_2 M$;
 
-  【*信噪比与其派生指标*】*参数定义*: $S$ 为信号平均功率; $N$ 为总噪声功率; $N_0$ 为单边噪声功率谱密度; $E_b$ 为每比特能量; $E_s$ 为每码元能量; $R_b$ 为比特速率(bps); $R_s$ 为符号传输速率(Baud); $B$ 为接收机信道带宽; $M$ 为多元调制进制数(如QPSK的 $M=4$).*核心折算链公式*:*1.功率与能量*: #text(rgb("#2b6cb0"))[$S = E_b dot R_b = E_s dot R_s$], #text(rgb("#2b6cb0"))[$N = N_0 dot B$];*2.三大经典换算*: #text(rgb("#d9383a"))[$S/N = (E_b/N_0) dot (R_b/B)$], #text(rgb("#d9383a"))[$S/N = (E_s/N_0) dot (R_s/B)$], #text(rgb("#d9383a"))[$E_s/N_0 = (E_b/N_0) dot log_2 M$].*隐含条件*:#text(rgb("#d9383a"))[系统未进行信道编码] (码率 $R_c=1$).若有 $R_c$,则 $E_s = E_b dot R_c dot log_2 M$;
+  【*频带利用率*】$R_b = R_s dot log_2 M$. M-PSK、M-QAM 等正交调制,其射频/带通带宽 $B_(R F) = 2 dot B_(text("基带"))$. 基带最小带宽 $B_(text("基带")) = R_s / 2$,则*理想射频带宽* $B_(R F) = R_s$. *实际射频带宽* $B_(R F) = R_s (1 + alpha)$.*两种衡量指标*:$eta_s = R_s / B_(R F) = 1 / (1 + alpha)"Baud/Hz"=R_b / B_(R F) = log_2 M / (1 + alpha)"bps/Hz"=eta_b$.*alpha=0时*:BPSK/QPSK/16QAM/64QAM 的 $eta_b$ 分别为 1 / 2 / 4 / 6 bps/Hz; $eta_s$ 则全部恒等于 1 Baud/Hz.
 
-  【*频带利用率*】#text(rgb("#d9383a"))[$R_b = R_s dot log_2 M$]. M-PSK、M-QAM 等正交调制,其射频/带通带宽 #text(rgb("#2b6cb0"))[$B_(R F) = 2 dot B_(text("基带"))$]. 基带最小带宽 $B_(text("基带")) = R_s / 2$,则*理想射频带宽* #text(rgb("#2b6cb0"))[$B_(R F) = R_s$]. *实际射频带宽* #text(rgb("#2b6cb0"))[$B_(R F) = R_s (1 + alpha)$].*两种衡量指标*:$eta_s = R_s / B_(R F) = 1 / (1 + alpha)"Baud/Hz"=R_b / B_(R F) = log_2 M / (1 + alpha)"bps/Hz"=eta_b$.*alpha=0时*:BPSK/QPSK/16QAM/64QAM 的 $eta_b$ 分别为 #text(rgb("#d9383a"))[1 / 2 / 4 / 6] bps/Hz; $eta_s$ 则全部恒等于 #text(rgb("#2b6cb0"))[1] Baud/Hz.
+  【*香农公式*】单位时间容量 $C_t = B log_2 (1 + P_s / (N_0 B)) = B log_2 (1 + "SNR")$ (单位 bps, $P_s$ 为信号平均功率, $N_0 B$ 为带宽 $B$ 内的总噪声功率).*带宽与容量(割裂极限)*: $P_s$ 固定时,增大 $B$ 可提升 $C_t$,但由于噪声功率随 $B$ 同步膨胀, $C_t$ 存在不可逾越的理论极限 $C_oo = lim_(B arrow.r infinity) C_t = P_s / (N_0 ln 2) approx 1.44 dot P_s / N_0$;*香农限(解题死限)*:当传送 1 比特信息(即 $C_oo = 1$ bps)时,所需的最小信噪比 $P_s / N_0 = ln 2 approx -1.6 "dB"$,这是 AWGN 信道无差错传输的绝对物理极限,任何编码都无法突破;
 
-  【*香农公式*】单位时间容量 #text(rgb("#d9383a"))[$C_t = B log_2 (1 + P_s / (N_0 B)) = B log_2 (1 + "SNR")$] (单位 bps, $P_s$ 为信号平均功率, $N_0 B$ 为带宽 $B$ 内的总噪声功率).*带宽与容量(割裂极限)*: $P_s$ 固定时,增大 $B$ 可提升 $C_t$,但由于噪声功率随 $B$ 同步膨胀, $C_t$ 存在不可逾越的理论极限 #text(rgb("#d9383a"))[$C_oo = lim_(B arrow.r infinity) C_t = P_s / (N_0 ln 2) approx 1.44 dot P_s / N_0$];*香农限(解题死限)*:当传送 1 比特信息(即 $C_oo = 1$ bps)时,所需的#text(rgb("#d9383a"))[最小信噪比] $P_s / N_0 = ln 2 approx #text(rgb("#d9383a"))[-1.6 dB]$,这是 AWGN 信道无差错传输的绝对物理极限,任何编码都无法突破;
+  【*恒包络连续相位*】*CPFSK*:时段 $k T_b <= t < (k+1)T_b$ 内信号 $s(t) = cos(omega_c t + a_k (h pi)/T_b t + phi_k)$,单个周期 $T_b$ 内:发 $a_k = 1$ 相位斜向上增 $+h pi$,发 $a_k = -1$ 相位斜向下减 $-h pi$.*MSK(最小频移键控)*:满足正交的最小调制指数 $h = 0.5$ 的 CPFSK 特例.*GMSK*:在 MSK 前加高斯低通滤波器,物理本质是将 MSK 折线相位轨迹的尖角磨圆滑,减小带外辐射 (高频旁瓣衰减极快,提高频谱利用率)
 
-  【*恒包络连续相位*】*CPFSK*:时段 $k T_b <= t < (k+1)T_b$ 内信号 $s(t) = cos(omega_c t + a_k (h pi)/T_b t + phi_k)$,单个周期 $T_b$ 内:发 $a_k = 1$ 相位斜向上增 $+h pi$,发 $a_k = -1$ 相位斜向下减 $-h pi$.*MSK(最小频移键控)*:满足正交的最小调制指数 #text(rgb("#d9383a"))[$h = 0.5$] 的 CPFSK 特例.*GMSK*:在 MSK 前加高斯低通滤波器,物理本质是将 MSK 折线相位轨迹的尖角#text(rgb("#38a169"))[磨圆滑],#text(rgb("#d9383a"))[减小带外辐射] (高频旁瓣衰减极快,提高频谱利用率)
+  【*BPSK与QPSK*】*BPSK*:  $s(t) = +-A cos omega_c t$. $P_b = Q(sqrt((2E_b)/N_0))$.*QPSK*:正交双路合成, $s(t) = A_c cos(omega_c t) - A_s sin(omega_c t)$,其中 $A_c, A_s = +-A / sqrt(2)$.*解调机理*:相干载波分两路正交相乘加低通滤波,完全解耦为两个独立的 BPSK 进行二维独立判决. $P_b = Q(sqrt((2E_b)/N_0))$. *码元错误率* $P_s = 1 - (1-P_b)^2 approx 2P_b = 2Q(sqrt((2E_b)/N_0)) = 2Q(sqrt(E_s/N_0))$
 
-  【*BPSK与QPSK*】*BPSK*:  $s(t) = +-A cos omega_c t$. #text(rgb("#d9383a"))[$P_b = Q(sqrt((2E_b)/N_0))$].*QPSK*:正交双路合成, $s(t) = A_c cos(omega_c t) - A_s sin(omega_c t)$,其中 $A_c, A_s = +-A / sqrt(2)$.*解调机理*:相干载波分两路正交相乘加低通滤波,完全解耦为两个独立的 BPSK 进行二维独立判决. #text(rgb("#d9383a"))[$P_b = Q(sqrt((2E_b)/N_0))$]. *码元错误率* #text(rgb("#2b6cb0"))[$P_s = 1 - (1-P_b)^2 approx 2P_b = 2Q(sqrt((2E_b)/N_0)) = 2Q(sqrt(E_s/N_0))$]
+  【*QPSK相位转移*】*QPSK*: *I/Q相位映射*: $(I,Q)$ -> 相位: $(+1,+1) arrow.r pi/4$; $(-1,+1) arrow.r (3pi)/4$; $(-1,-1) arrow.r -(3pi)/4$; $(+1,-1) arrow.r -(pi)/4$.*QPSK*: I/Q 两路同时翻转,最大相位跳变 $pi$. 轨迹直接穿过原点,包络起伏 100%,产生严重非线性失真.*OQPSK*: Q 路延迟半码元错开翻转,最大相位跳变仅为 $pi/2$. 轨迹穿过原点,包络起伏极小.*3. $pi/4$-DQPSK*:绝对相位$theta_k = theta_(k-1) + phi_k$,最大相位跳变 $(3pi)/4$. 轨迹不穿过原点
 
-  【*QPSK相位转移*】*QPSK*: *I/Q相位映射*: $(I,Q)$ -> 相位: $(+1,+1) arrow.r pi/4$; $(-1,+1) arrow.r (3pi)/4$; $(-1,-1) arrow.r -(3pi)/4$; $(+1,-1) arrow.r -(pi)/4$.*QPSK*: I/Q 两路同时翻转,最大相位跳变 #text(rgb("#d9383a"))[$pi$]. 轨迹#text(rgb("#d9383a"))[直接穿过原点],包络起伏 100%,产生严重非线性失真.*OQPSK*: Q 路延迟半码元错开翻转,最大相位跳变仅为 #text(rgb("#2b6cb0"))[$pi/2$]. 轨迹#text(rgb("#38a169"))[穿过原点],包络起伏极小.*3. $pi/4$-DQPSK*:绝对相位$theta_k = theta_(k-1) + phi_k$,最大相位跳变 #text(rgb("#2b6cb0"))[$(3pi)/4$]. 轨迹#text(rgb("#38a169"))[不穿过原点]
+  【*OFDM机理*】正交子载波间隔 $Delta f = 1/T_s$ ,串并转换后符号周期扩大 $N$ 倍变为 $T = N T_s$ 使得单个子信道带宽小于信道相干带宽,从而将频率选择性衰落转化为平坦性衰落. 实现中采用 IFFT 代替模拟振荡器阵列,发送端第 $m$ 个时域采样点信号,接收端通过 FFT 恢复符号.$B = f_(N-1) - f_0 + 2 delta = ( N - 1 ) Delta f + 2 delta approx N Delta f$,$eta = (N R_s log_2 M) / (( N - 1 ) Delta f + 2 delta) approx log_2 M$
 
-  【*OFDM机理*】#text(rgb("#2b6cb0"))[正交子载波间隔] $Delta f = 1/T_s$ ,串并转换后符号周期扩大 $N$ 倍变为 $T = N T_s$ 使得单个子信道带宽小于信道相干带宽,从而将#text(rgb("#d9383a"))[频率选择性衰落转化为平坦性衰落]. 实现中采用 IFFT 代替模拟振荡器阵列,发送端第 $m$ 个时域采样点信号,接收端通过 FFT 恢复符号.$B = f_(N-1) - f_0 + 2 delta = ( N - 1 ) Delta f + 2 delta approx N Delta f$,$eta = (N R_s log_2 M) / (( N - 1 ) Delta f + 2 delta) approx log_2 M$
+  【*CP机制*】为了消除码间干扰(ISI)与 ICI,在时域符号前插入保护间隔,若直接填零(ZP)会导致子载波正交性破坏从而引发 ICI.必须采用循环前缀(CP),即复制时域符号尾部的最后 $N_("cp")$ 个采样点垫到头部,其关键边界隐含条件为CP 长度 $tau_("cp")$ 必须大于信道最大多径时延扩展 $tau_(max)$. 带 CP 的 OFDM 符号总周期变为 $T_("total") = T + tau_("cp")$,由于多径引起的时延混叠只污染 CP 段,使得在 FFT 窗口内时域卷积完全转化为频域乘积积分 $Y(n) = H(n)X(n) + W(n)$.
 
-  【*CP机制*】为了消除#text(rgb("#d9383a"))[码间干扰(ISI)]与 ICI,在时域符号前插入保护间隔,若直接填零(ZP)会导致子载波正交性破坏从而引发 ICI.必须采用#text(rgb("#2b6cb0"))[循环前缀(CP)],即复制时域符号尾部的最后 $N_("cp")$ 个采样点垫到头部,其关键边界隐含条件为#text(rgb("#d9383a"))[CP 长度 $tau_("cp")$ 必须大于信道最大多径时延扩展 $tau_(max)$]. 带 CP 的 OFDM 符号总周期变为 $T_("total") = T + tau_("cp")$,由于多径引起的时延混叠只污染 CP 段,使得在 FFT 窗口内时域卷积完全转化为#text(rgb("#38a169"))[频域乘积积分 $Y(n) = H(n)X(n) + W(n)$].
+  【*信道估计和PAPR*】块状导频频率上连续,梳状导频时间上连续.峰均比 PAPR,定义公式为 $"PAPR" = max(|s(t)|^2) / E(|s(t)|^2)$,当子载波数 $N$ 很大时时域信号近似服从高斯分布.抑制 PAPR 核心方法对比:限幅限制峰值附近信号幅度,实现简单但破坏正交性,且带外干扰;编码增加冗余,选择小PAPR码字,无失真但谱效降低且复杂度高；加扰用扰码降低信号同相叠加概率,无失真但需要额外信息且复杂度高;预失真进入放大器之前预先补偿失真,让放大之后无失真,本质没有抑制PAPR,补偿程度有限.
 
-  【*信道估计和PAPR*】#text(rgb("#2b6cb0"))[块状导频]频率上连续,#text(rgb("#2b6cb0"))[梳状导频]时间上连续.#text(rgb("#d9383a"))[峰均比 PAPR],定义公式为 $"PAPR" = max(|s(t)|^2) / E(|s(t)|^2)$,当子载波数 $N$ 很大时时域信号近似服从高斯分布.抑制 PAPR 核心方法对比:#text(rgb("#2b6cb0"))[限幅]限制峰值附近信号幅度,实现简单但破坏正交性,且带外干扰;#text(rgb("#2b6cb0"))[编码]增加冗余,选择小PAPR码字,无失真但谱效降低且复杂度高；#text(rgb("#2b6cb0"))[加扰]用扰码降低信号同相叠加概率,无失真但需要额外信息且复杂度高;#text(rgb("#2b6cb0"))[预失真]进入放大器之前预先补偿失真,让放大之后无失真,本质没有抑制PAPR,补偿程度有限.
-
-  【*OFDM优缺点*】#text(rgb("#38a169"))[核心优点]:正交子载波频谱重叠交叉使频谱利用率极高;串并转换减小符号速率,抗多径干扰与抗窄带衰落能力强;FFT/IFFT实现降低复杂度;CP克服多径带来的ISI;获取等效频率单径信道;降低对时间同步的要求.#text(rgb("#d9383a"))[致命缺点]:频偏敏感,频偏容易使得正交性被破坏;高PAPR,多个子信道叠加,对器件要求高
+  【*OFDM优缺点*】核心优点:正交子载波频谱重叠交叉使频谱利用率极高;串并转换减小符号速率,抗多径干扰与抗窄带衰落能力强;FFT/IFFT实现降低复杂度;CP克服多径带来的ISI;获取等效频率单径信道;降低对时间同步的要求.致命缺点:频偏敏感,频偏容易使得正交性被破坏;高PAPR,多个子信道叠加,对器件要求高
 
   #line(length: 100%, stroke: 0.5pt)
 
