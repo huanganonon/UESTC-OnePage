@@ -313,42 +313,44 @@
 
   #kp-mix-box(clr-green, [微观分集]) *时间*:信息在不同时刻重复传输$Delta T>>T_C$ *频率*:信息以不同频率传输 $Delta f >> B_C$ *空间*: 不相关的两个以上天线(波束方向)或同一天线不同极化方向(水平/垂直)传输同一信号$Delta x >> D_C$
 
-  #kp-mix-box(clr-blue, [分集合并]) 各支路独立且信号与噪声无关,有相同的*平均信噪比*$xi_k=overline(xi)$ #info([*最大比合并*]):调整同相后按SNR加权合并$alpha_k = C r_k / N_k prop r_k / N_k$,合并后$xi_("MRC") = sum_(k=1)^M xi_k=M overline(xi)$,$D_("MRC") = overline(xi_("mr"))/overline(xi)=M$ *等增益*:所有分支权重相等,$xi_("EGC") = [1+(M-1) pi/4]overline(xi)$ *选择*:选择SNR最大的分支(任意时刻和频率等)$xi_("SC")=overline(xi) sum_(k=1)^M 1/k$
+  #kp-mix-box(clr-blue, [最大比合并]) #success([*系统模型*]):设M路合并信号包络为$r_("mr") = sum_(k=1)^(M) a_k r_k$;正弦信号瞬时功率$P_s = r_("mr")^2/2$;合并输出噪声总功率$N_("mr") = sum_(k=1)^(M) a_k^2 N_k$;得到#info([合并器输出信噪比]):$xi_(m r) = P_s / N_(m r) = (sum_(k=1)^M a_k r_k)^2 / (2 sum_(k=1)^M a_k^2 N_k) = [sum_(k=1)^M (a_k sqrt(N_k)) times (r_k \/ sqrt(N_k))]^2 / (2 sum_(k=1)^M a_k^2 N_k)$ #success([*许瓦兹不等式寻优*]):可令$x_k = a_k sqrt(N_k),y_k = r_k/sqrt(N_k)$,由$(sum x_k y_k)^2 <= (sum x_k^2)(sum y_k^2)$可得:$xi_(m r) <= ( ( sum_(k=1)^M a_k^2 N_k ) dot ( sum_(k=1)^M r_k^2 \/ N_k ) ) / (2 sum_(k=1)^M a_k^2 N_k) = sum_(k=1)^M r_k^2 / (2 N_k) = sum_(k=1)^M xi_k$,#info([取等条件])$x_k / y_k = (a_k sqrt(N_k)) / (r_k \/ sqrt(N_k)) = C => a_k = C r_k / N_k prop r_k / N_k$(加权系数与信噪比成正比)
 
-  【*交织*】*概念*:一条消息中的比特以非连续方式传送,使突发差错信道变为离散信道(将突发错误随机化),便于利用纠错码消除随机错 *行列交织器*:m行n列,#alert([按行写入,按列读出]),#info([交织深度M,交织宽度N,交织延迟M$dot$N]) *要求*: #alert([交织深度$>>$相干时间]),交织深度对应实际时间$M times T_S ("符号周期")$
+  #kp-mix-box(clr-blue, [合并增益]) 各支路独立且信号与噪声无关,有相同的*平均信噪比*$xi_k=overline(xi)$ #info([*最大比合并*]):调整同相后按SNR加权合并$alpha_k = C r_k / N_k prop r_k / N_k$,合并后$xi_("MRC") = sum_(k=1)^M xi_k=M overline(xi)$,$D_("MRC") = overline(xi_("mr"))/overline(xi)=M$ #info([*等增益合并*]):所有分支权重相等,$xi_("EGC") = [1+(M-1) pi/4]overline(xi)$ #info([*选择合并*]):选择SNR最大的分支(任意时频等)$xi_("SC")=overline(xi) sum_(k=1)^M 1/k$.$F(x) = P_("out") = P(xi <= x),overline(P_b) = integral_0^infinity P_b (xi)p_M (xi)d xi$
 
-  【*行列交织器优缺点*】*优点*:抗突发误码能力强,结构简单易实现;*缺点*:交织时延大,存储开销大(可引入卷积交织器)
+  #kp-mix-box(clr-blue, [交织]) *概念*:一条消息中的比特以非连续方式传送,使突发差错信道变为离散信道(将突发错误随机化),便于利用纠错码消除随机错 *行列交织器*:m行n列,#alert([按行写入,按列读出]),#info([交织深度(交织前相邻两符号在交织后的距离)M,交织宽度N,交织延迟M$dot$N]) *要求*: #alert([交织深度$>>$相干时间]),交织深度对应实际时间$M times T_S ("符号周期")$;交织宽度$>$分组长度/译码深度
 
-  【*信道编码概念*】*定义*:信息码元中增加冗余码元,在接收端检测或纠正有噪信道中引入的误码 *码率*:$R = k/n$ *码距*
-  【*线性分组码*】$(n,k)$ 循环码(CRC)$x^(n-k)m(x)$,汉明码
+  #kp-mix-box(clr-green, [行列交织器优缺点]) *优点*:抗突发误码能力强,结构简单易实现;*缺点*:交织时延大,存储开销大(可引入卷积交织器)
 
-  【*卷积码*】$(n,k,m)$ $m$寄存器个数,状态数$2^m$ *约束长度*$l=m+1$ *多项式编码*:$g^((1))(D)=1+D+D^2,g^((2))(D)=1+D^2$ *Vterbi译码*:一种最大似然序列译码,运算量和存贮量都与状态数呈线性关系
+  #kp-mix-box(clr-blue, [信道编码]) *定义*:信息码元中增加冗余码元,在接收端检测或纠正有噪信道中引入的误码 *码率*:$R = k/n$ *码距*:码字中不同码元数目
 
-  【*线性均衡器*】$y_n = sum_(k=-N)^N c_k x_(n-k) <=> Y(z) = X(z)E(z)$,$X(z) = sum_(k=-N)^N x_k z^(-k)$,$E(z) = sum_(k=-N)^N c_k z^(-k)$,输出$y_n$,输入$x_n$,均衡$c_n$
+  #kp-mix-box(clr-purple, [分组码]) $(n,k)$ 循环码(CRC)$x^(n-k)m(x)$($g(x)$最高$n-k$),汉明码
 
-  【*迫零算法*】*最小峰值误差准则*$D = 1 / y_0 sum_(mat(k = -infinity; k != 0))^infinity |y_k|$ *算法*:$x$代入初始畸变$D_0<1$时,迫零可得到$N$阶下最优解.$y_n = cases(1 &", " n = 0, 0 &", " n = plus.minus 1\, ...\, plus.minus N)$,$quad y = x c => c = x^(-1) y$.N大于多径M
+  #kp-mix-box(clr-red, [卷积码]) $(n,k,m)$ $m$寄存器个数,状态数$2^m$ *约束长度*$l=m+1$ *多项式编码*:$g^((1))(D)=1+D+D^2,g^((2))(D)=1+D^2$ *Vterbi译码*:一种最大似然序列译码,运算量和存贮量都与状态数呈线性关系
 
-  $y = mat(y_(-N); y_(-N+1); dots.v; y_0; dots.v; y_(N-1); y_N) quad x = mat(x_0, x_(-1), dots.h, x_(-2N); x_1, x_0, dots.h, x_(-2N+1); dots.v, dots.v, , dots.v; x_N, x_(N-1), dots.h, x_(-N); dots.v, dots.v, , dots.v; x_(2N-1), x_(2N-2), dots.h, x_(-1); x_(2N), x_(2N-1), dots.h, x_0) quad c = mat(c_(-N); c_(-N+1); dots.v; c_0; dots.v; c_(N-1); c_N)$
+  #kp-mix-box(clr-blue, [横向滤波线性均衡器]) $y_n = sum_(k=-N)^N c_k x_(n-k) <=> Y(z) = X(z)E(z)$,$X(z) = sum_(k=-N)^N x_k z^(-k)$,$E(z) = sum_(k=-N)^N c_k z^(-k)$,输出$y_n$,输入$x_n$,均衡$c_n$
 
-  【*其它均衡*】*均方误差*:$epsilon.alt^2 = 1/y_0^2 sum_(mat(k = -infinity; k != 0))^(infinity)y_k^2$,自适应均方误差定义$overline(epsilon.alt^2)=E[e_k^2]=E[a_k-y_k]$ *自适应均衡*:训练/跟踪模式，单向/选择式单向均衡
+  #kp-mix-box(clr-red, [迫零算法]) #info([*最小峰值误差准则*])$D = 1 / y_0 sum_(mat(k = -infinity; k != 0))^infinity |y_k|$,使码间干扰峰值最小 *算法*:$x$代入初始畸变$D_0<1$时,迫零可得到$N$阶($2N+1$抽头)下最优解.$y_n = cases(1 &", " n = 0, 0 &", " n = plus.minus 1\, ...\, plus.minus N)$$quad bold(y) = bold(x) bold(c) => bold(c) = bold(x)^(-1) bold(y)$.N大于多径M
+  $bold(y) = mat(y_(-N); y_(-N+1); dots.v; y_0; dots.v; y_(N-1); y_N) quad bold(x) = mat(x_0, x_(-1), dots.h, x_(-2N); x_1, x_0, dots.h, x_(-2N+1); dots.v, dots.v, , dots.v; x_N, x_(N-1), dots.h, x_(-N); dots.v, dots.v, , dots.v; x_(2N-1), x_(2N-2), dots.h, x_(-1); x_(2N), x_(2N-1), dots.h, x_0) quad bold(c) = mat(c_(-N); c_(-N+1); dots.v; c_0; dots.v; c_(N-1); c_N)$
 
-  【*扩频概念*】*定义*:扩频宽度远大于所传信息必需的最小带宽;频带的扩展由扩频码序列完成,与信息数据无关;收端用相同扩频码解扩并恢复数据 *优点*:降低信号功率谱密度(抗截获)干扰抑制(抗干扰) *本质*:频率/时间分集 *扩频增益*:$G_p=("解扩器输出SNR")/("解扩器输入SNR")=(B_(S S)"扩展带宽")/(B_D"信息带宽")$
+  #kp-mix-box(clr-green, [其它均衡]) #info([*最小均方误差准则*]):均方误差:$epsilon.alt^2 = 1/y_0^2 sum_(mat(k = -infinity; k != 0))^(infinity)y_k^2$使码间干扰均方误差最小,自适应均方误差定义$overline(epsilon.alt^2)=E[e_k^2]=E[a_k-y_k]$ *自适应均衡*:训练/跟踪模式，单向/选择式单向均衡
 
-  【*m序列*】特征多项式-最长线性反馈移位寄存器-周期$N=2^m-1$(除去全0) *平衡特性*:完整N内1比0多一个 *游程*:N内连续0/1序列称为一个游程;N内游程总数$L = (N+1)/2$;长度为$l$的游程数$ceil(L/2^l)$;最长游程是m个连1 *相关*:两序列a,b#info([模2相加]),0数目为A 1数目为D $R_(a,b)=(A-D)/(A+D)$;#info([自相关函数])$R_(a, a)(n) = cases(1 &", " n = l N \, l = 0\, plus.minus 1\, ..., -1/N &", 其余 " n)$ *计算*:原$b(t)$扩展N后#success([异或])
+  #kp-mix-box(clr-blue, [扩频]) *定义*:扩频宽度远大于所传信息必需的最小带宽;频带的扩展由扩频码序列完成,与信息数据无关;收端用相同扩频码解扩并恢复数据 *优点*:降低信号功率谱密度(抗截获)干扰抑制(抗干扰) *本质*:频率/时间分集 *扩频增益*:$G_p=("解扩器输出SNR")/("解扩器输入SNR")=(B_(S S)"扩展带宽")/(B_D"信息带宽")$
 
-  【*DS*】*参数*:扩展倍数$N= B_c/B_b = T_b/T_c$实际扩展为$B_c + B_b$ *2PSK下*:$G_p= P_i/P_o = N$ *抗窄带干扰*:从发端扩频功率谱开始#image("figures/抗窄带干扰.pdf") *抗衰落*:#alert([抗频率选择性失真])扩频码的码片时间小于多径时延差时,可利用扩频码的自相关特性进行相关解扩,提取所需要的主径信号,抑制多径干扰 #alert([抗SNR损耗(多径)])RAKE接收,可以区分#success([多径时延差大于码片周期(多径可分离)])的各条多径信号并合并,即时间/多径分集,具有分集合并增益 *RAKE接收*:用扩频码的相关特性进行多径分离与合并,实现时间分集; #alert([两径时延差大于Chip周期]);#info([多径矢量合成])二维+单向 #image("figures/RAKE.pdf")
+  #kp-mix-box(clr-blue, [m序列]) 特征多项式-最长线性反馈移位寄存器-周期$N=2^m-1$(除去全0) #info([*平衡特性*]):完整N内1比0多一个 #info([*游程特性*]):N内连续0/1序列称为一个游程;N内游程总数$L = (N+1)/2$;长度为$l$的游程数$ceil(L/2^l)$;最长游程是m个连1 #info([*相关特性*]):两序列a,b#info([模2相加]),0数目为A,1数目为D $R_(a,b)=(A-D)/(A+D)$;#info([自相关函数])$R_(a, a)(n) = cases(1 &", " n = l N \, l = 0\, plus.minus 1\, ..., -1/N &", 其余 " n)$ #alert([*计算*]):原$b(t)$扩展N后#success([异或])$G=N$
 
-  【*FH*】*概念*:载波信号的频率随时间变化,#info([靠躲避干扰来提升抗干扰性能]),本质是频率分集 *参数*:$G_H = W/B = N$即跳频点数 *抗衰落*:#alert([抗频率选择性失真])在多径信号没有到来之前接收机已开始接收下一跳信号,但需以提高跳频速率为代价(快跳频) #alert([抗SNR损耗])跳频总带宽大于信道相干带宽时,若将相关的跳频频点作为一个跳频子集,不同跳频子集的信号相互独立(#info([跳频频率间隔大于信道相干带宽])),可获得频率分集,具有分集合并增益 #info([抗同信道干扰])正交跳频图案避免复用引起的干扰
+  #kp-mix-box(clr-red, [DS]) *参数*:扩展倍数$N= B_c/B_b = T_b/T_c$实际扩展为$B_c + B_b$ *2PSK下*:$G_p= P_i/P_o = N$ #success([*抗窄带干扰*]):发端扩频,信号频谱展宽,功率谱密度降低;受到干扰;信号解扩恢复为窄带,功率谱密度上升,同时干扰频谱被扩展,其功率谱密度下降;经窄带滤波,信道内干扰功率大幅下降#image("figures/抗窄带干扰.pdf") #success([*抗衰落*]):#alert([抗频率选择性失真]) (抗衰落):扩频码的#info([码片时间小于多径时延差(频谱扩展宽度远大于信道相关带宽)])时,可利用扩频码的自相关特性进行相关解扩,提取所需要的主径信号,抑制多径干扰(频率分集增益) #alert([抗SNR损耗]) (抗多径):利用RAKE接收,可以区分#success([多径时延差大于码片周期(多径可分离)])的各条多径信号并合并,即时间/多径分集,具有分集合并增益 #success([*RAKE接收*]):用扩频码的相关特性进行多径分离与合并,实现时间分集;*要求*:#alert([两径时延差大于Chip周期]);*绘图*:#info([多径矢量合成])三角$->$单向,#info([接收机示意图]): #image("figures/RAKE.pdf")
 
-  【*空间分集*】对抗衰落;*STBC码字*$mat(c_1, c_2) => mat(c_1, -c_2^*; c_2, c_1^*)$ *等效公式*:$bold(r)=bold(H)bold(c)+bold(n)=mat(r_1; r^*)=mat(h_1, h_2; h_2^*, -h_1^*)mat(c_1; c_2)+mat(n_1; n_2^*)$ *检测*:$tilde(bold(r))=bold(H)^H bold(r)=(|h_1^2|+|h_2^2|)bold(c)+tilde(bold(n))$,再接ML检测 *性能*:#info([分集度])BER曲线斜率,MRC与STBC相同;#info([分集增益])MRC性能好3dB,但因为#success([非对称性])STBC应用广(MRC永远1Tx多Rx)
+  #kp-mix-box(clr-red, [FH]) *概念*:载波信号的频率随时间变化,#info([靠躲避干扰来提升抗干扰性能]),本质是频率分集 *参数*:$G_H = W/B = N$即跳频点数 #success([*抗衰落*]):#alert([抗频率选择性失真]) (抗多径):在#info([多径信号没有到来之前(跳频周期小于多径时延差)])接收机已开始接收下一跳信号,但需以提高跳频速率为代价(快跳频) #alert([抗SNR损耗]) (抗衰落):#info([跳频总带宽大于信道相干带宽(也可理解为跳频频率间隔大于信道相干带宽)])时,若将相关的跳频频点作为一个跳频子集,不同跳频子集的信号相互独立,可获得频率分集,具有分集合并增益 #success([*抗同信道干扰*(补充)])正交跳频图案避免频率复用引起的同频干扰
 
-  【*空间复用*】提高频谱效率;*V-BLAST*:$bold(r)=bold(H)bold(c)+bold(n)$ *ML*:$tilde(bold(r))=arg min_(hat(bold(c))in bold(C))|bold(r)-bold(H)hat(bold(c))|^2$,需要先验等概+AWGN,最优最复杂
+  #kp-mix-box(clr-green, [MIMO]) *建模*:AWGN下$bold(y) = bold(H)bold(x) + bold(n)$;*技术分类*:#info([空间分集]),#info([空间复用]) (接收/发射分集),#info([预编码/波束赋形]) (特定方向波束),#info([毫米波]) (窄定向波束)
 
-  【*MIMO-OFDM*】MIMO在不增加带宽的条件下成倍提高系统容量和频谱利用率;OFDM把频率选择性衰落信道变成多个子载波的平坦衰落信道,使MIMO在宽带无线通信中发挥其优势
+  #kp-mix-box(clr-red, [空间分集]) #success([对抗衰落]);#alert([*STBC空时分组码*]):$mat(c_1, c_2) => mat(c_1, -c_2^*; c_2, c_1^*)$ *等效公式*:$bold(r)=bold(H)bold(c)+bold(n)=mat(r_1; r^*)=mat(h_1, h_2; h_2^*, -h_1^*)mat(c_1; c_2)+mat(n_1; n_2^*)$ *检测*:$tilde(bold(r))=bold(H)^H bold(r)=(|h_1^2|+|h_2^2|)bold(c)+tilde(bold(n))$,再接#success([ML检测]) #info([*多接收*]):线性合并$tilde(bold(r))=sum_(j=1)^(M_r)bold(H)_j^H r_j=(sum_(j=1)^(M_r) ||bold(h)_j||^2)bold(c) + tilde(bold(n))$;*性能*:#info([分集度]) (BER曲线斜率)MRC与STBC相同;#info([分集增益])MRC性能好3dB(STBC中两TX总功率和MRC单Tx功率相同),但因为#success([非对称性])STBC应用广(MRC永远1Tx多Rx)
 
-  【*链路自适应技术*】系统依据信道的变化动态地调整系统参数,达到性能的最优 AMC,ARQ/FEC/HARQ
+  #kp-mix-box(clr-red, [空间复用]) #success([提高频谱效率]);#alert([*V-BLAST垂直贝尔实验室分层空时码*]):$(c_1, c_2) => mat(c_1;c_2)$,$bold(r)=bold(H)bold(c)+bold(n)$ *ML*:$tilde(bold(r))=arg min_(hat(bold(c))in bold(C))|bold(r)-bold(H)hat(bold(c))|^2$,需要先验等概+AWGN,最优最复杂
 
-  #line(length: 100%, stroke: 0.5pt)
+  #kp-mix-box(clr-green, [MIMO-OFDM]) MIMO在不增加带宽的条件下成倍提高系统容量和频谱利用率;OFDM把频率选择性衰落信道变成多个子载波的平坦衰落信道,使MIMO在宽带无线通信中发挥其优势
+
+  #kp-mix-box(clr-purple, [链路自适应技术]) 系统依据信道的变化动态地调整系统参数,达到性能的最优 AMC(自适应编码调制),ARQ/FEC/HARQ
 
   #kp-mix-box(clr-green, [区域覆盖]) *小容量大区制*:建网方式简单,设备成本低,无切换问题,但容量小,功耗与限制大且频谱效率极低;*大容量小区制*:容量大(频率复用)功耗低且设备小,但网络复杂且存在切换问题
 
