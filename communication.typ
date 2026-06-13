@@ -64,8 +64,8 @@
 
 // ========== 其他样式设定(如颜色、行距等) ==========
 #set par(
-  leading: 0.8em, // 行距
-  spacing: 0.7em, // 段间距
+  leading: 0.7em, // 行距
+  spacing: 0.5em, // 段间距
 )
 
 // 强行压缩独立公式块的上下外边距，默认值较大，改为 0.4em 甚至更低
@@ -115,8 +115,9 @@
 }
 
 // 在文档中调用一次,画框
-#draw-stamp-box([*瑞利与莱斯PDF/CDF图像特征*])
+#draw-stamp-box([])
 
+// 左上角框
 #place(
   dx: 0mm,
   dy: 0mm,
@@ -129,11 +130,30 @@
     inset: 0pt,
     outset: 0pt,
     [
-      a
+      ab
     ],
   ),
 )
 
+// 顶部空余
+#place(
+  dx: title-left - safe-left + 0.3mm,
+  dy: 0mm,
+  clearance: 0em,
+  rect(
+    width: title-right - title-left - 0.6mm,
+    height: stamp-top - safe-top - 0.5mm, // 留出一点空隙
+    fill: none,
+    stroke: (dash: "dashed", paint: purple, thickness: 0.4pt),
+    inset: 0pt,
+    outset: 0pt,
+    [   // 这里写顶部速记内容,如关键公式
+      ccc
+    ],
+  ),
+)
+
+// 右上角框
 #place(
   dx: title-right - safe-left,
   dy: 0mm,
@@ -146,11 +166,12 @@
     inset: 0pt,
     outset: 0pt,
     [
-      a
+      #image("figures/RAKE.pdf")
     ],
   ),
 )
 
+// 中间空隙
 #place(
   dx: 0mm,
   dy: name-top - safe-top,
@@ -163,7 +184,7 @@
     inset: 0pt,
     outset: 0pt,
     [
-
+      #v(0.6em) #image("figures/抗窄带干扰.pdf", width: 90%)
     ],
   ),
 )
@@ -172,24 +193,7 @@
 #let top-area-y = 2mm             // 顶部小框距纸顶的微调距离
 #let top-area-height = stamp-top - top-area-y - 2mm   // 留出上下空隙
 
-// 放置顶部小内容(绝对定位)
-#place(
-  dx: 0mm,
-  dy: 0mm,
-  clearance: 0em,
-  rect(
-    width: content-width,
-    height: stamp-top - safe-top - 1mm, // 留出一点空隙
-    fill: none,
-    stroke: (dash: "dashed", paint: blue, thickness: 0.4pt),
-    inset: 0pt,
-    outset: 0pt,
 
-    [   // 这里写顶部速记内容,如关键公式
-      // ；*基带*理想低通传输 $B = R_s/2$,对于NRZ则$B = R_s$,对于升余弦则$B = (1 + alpha) R_s/2$,但是一般涉及到SNR都是频带,即基带的两倍
-    ],
-  ),
-)
 
 // #place(
 //   dx: stamp-left - 10mm,
@@ -298,8 +302,9 @@
 
   #kp-mix-box(clr-green, [MSPK]) *BPSK*:$s(t) = plus.minus A cos omega_c t$.$P_b = Q(sqrt((2E_b)/N_0))$.*QPSK*:正交双路合成,$s(t) = A_c cos(omega_c t) - A_s sin(omega_c t)$,其中 $A_c, A_s = plus.minus A / sqrt(2)$.*解调机理*:相干载波分两路正交相乘,加低通滤波,完全解耦为两个独立的 BPSK 进行二维独立判决. $P_b = Q(sqrt((2E_b)/N_0))$
 
-  #kp-mix-box(clr-red, [相位映射]) $(I,Q)-> phi_k$:$(+1,+1) arrow.r pi/4$; $(-1,+1) arrow.r (3pi)/4$; $(-1,-1) arrow.r -(3pi)/4$; $(+1,-1) arrow.r -(pi)/4$.*QPSK*:I/Q两路同时翻转,#success([最大相位跳变$pi$.轨迹直接穿过原点]),包络起伏100%,产生严重非线性失真.*OQPSK*:Q路延迟一个比特错开翻转,#success([最大相位跳变$pi/2$.轨迹不穿过原点])*$pi/4$DQPSK*:绝对相位$theta_k = theta_(k-1) + phi_k$,#success([最大相位跳变 $(3pi)/4$.轨迹不穿过原点]),#info([频谱性能])劣于OQPSK,但优于QPSK
   #image("figures/相位转移图.pdf")
+  #kp-mix-box(clr-red, [相位映射]) $(I,Q)-> phi_k$:$(+1,+1) arrow.r pi/4$; $(-1,+1) arrow.r (3pi)/4$; $(-1,-1) arrow.r -(3pi)/4$; $(+1,-1) arrow.r -(pi)/4$.*QPSK*:I/Q两路同时翻转,#success([最大相位跳变$pi$.轨迹直接穿过原点]),包络起伏100%,产生严重非线性失真.*OQPSK*:Q路延迟一个比特错开翻转,#success([最大相位跳变$pi/2$.轨迹不穿过原点])*$pi/4$DQPSK*:绝对相位$theta_k = theta_(k-1) + phi_k$,#success([最大相位跳变 $(3pi)/4$.轨迹不穿过原点]),#info([频谱性能])劣于OQPSK,但优于QPSK
+
 
   #kp-mix-box(clr-blue, [OFDM]) #info([*正交子载波*]):总带宽$B = 1/T_s$,串并转换后符号周期扩大$N$倍$T = N T_s$使得单个子信道带宽小于信道相干带宽(平坦衰落).$B = f_(N-1) - f_0 + 2 delta approx N Delta f$,$eta = (N R_s log_2 M) / (( N - 1 ) Delta f + 2 delta) approx log_2 M$ *论述*:#success([OFDM是一种无线环境下的高速传输技术,将高速的数据流分解为多路并行的低速数据流,在多个载波上同时进行传输]) *流程*:输入$->$S/P转换$->$IFFT$->$P/S转换$->$加CP$->$D/A$->$RF,接收端逆过程即可
 
@@ -338,7 +343,7 @@
 
   #kp-mix-box(clr-blue, [m序列]) 特征多项式-最长线性反馈移位寄存器-周期$N=2^m-1$(除去全0) #info([*平衡特性*]):完整N内1比0多一个 #info([*游程特性*]):N内连续0/1序列称为一个游程;N内游程总数$L = (N+1)/2$;长度为$l$的游程数$ceil(L/2^l)$;最长游程是m个连1 #info([*相关特性*]):两序列a,b#info([模2相加]),0数目为A,1数目为D $R_(a,b)=(A-D)/(A+D)$;#info([自相关函数])$R_(a, a)(n) = cases(1 &", " n = l N \, l = 0\, plus.minus 1\, ..., -1/N &", 其余 " n)$ #alert([*计算*]):原$b(t)$扩展N后#success([异或])$G=N$
 
-  #kp-mix-box(clr-red, [DS]) *参数*:扩展倍数$N= B_c/B_b = T_b/T_c$实际扩展为$B_c + B_b$ *2PSK下*:$G_p= P_i/P_o = N$ #success([*抗窄带干扰*]):发端扩频,信号频谱展宽,功率谱密度降低;受到干扰;信号解扩恢复为窄带,功率谱密度上升,同时干扰频谱被扩展,其功率谱密度下降;经窄带滤波,信道内干扰功率大幅下降#image("figures/抗窄带干扰.pdf") #success([*抗衰落*]):#alert([抗频率选择性失真]) (抗衰落):扩频码的#info([码片时间小于多径时延差(频谱扩展宽度远大于信道相关带宽)])时,可利用扩频码的自相关特性进行相关解扩,提取所需要的主径信号,抑制多径干扰(频率分集增益) #alert([抗SNR损耗]) (抗多径):利用RAKE接收,可以区分#success([多径时延差大于码片周期(多径可分离)])的各条多径信号并合并,即时间/多径分集,具有分集合并增益 #success([*RAKE接收*]):用扩频码的相关特性进行多径分离与合并,实现时间分集;*要求*:#alert([两径时延差大于Chip周期]);*绘图*:#info([多径矢量合成])三角$->$单向,#info([接收机示意图]): #image("figures/RAKE.pdf")
+  #kp-mix-box(clr-red, [DS]) *参数*:扩展倍数$N= B_c/B_b = T_b/T_c$实际扩展为$B_c + B_b$ *2PSK下*:$G_p= P_i/P_o = N$ #success([*抗窄带干扰*]):发端扩频,信号频谱展宽,功率谱密度降低;受到干扰;信号解扩恢复为窄带,功率谱密度上升,同时干扰频谱被扩展,其功率谱密度下降;经窄带滤波,信道内干扰功率大幅下降;#success([*抗衰落*]):#alert([抗频率选择性失真]) (抗衰落):扩频码的#info([码片时间小于多径时延差(频谱扩展宽度远大于信道相关带宽)])时,可利用扩频码的自相关特性进行相关解扩,提取所需要的主径信号,抑制多径干扰(频率分集增益) #alert([抗SNR损耗]) (抗多径):利用RAKE接收,可以区分#success([多径时延差大于码片周期(多径可分离)])的各条多径信号并合并,即时间/多径分集,具有分集合并增益 #success([*RAKE接收*]):用扩频码的相关特性进行多径分离与合并,实现时间分集;*要求*:#alert([两径时延差大于Chip周期]);*绘图*:#info([多径矢量合成])三角$->$单向,#info([接收机示意图])见右上角
 
   #kp-mix-box(clr-red, [FH]) *概念*:载波信号的频率随时间变化,#info([靠躲避干扰来提升抗干扰性能]),本质是频率分集 *参数*:$G_H = W/B = N$即跳频点数 #success([*抗衰落*]):#alert([抗频率选择性失真]) (抗多径):在#info([多径信号没有到来之前(跳频周期小于多径时延差)])接收机已开始接收下一跳信号,但需以提高跳频速率为代价(快跳频) #alert([抗SNR损耗]) (抗衰落):#info([跳频总带宽大于信道相干带宽(也可理解为跳频频率间隔大于信道相干带宽)])时,若将相关的跳频频点作为一个跳频子集,不同跳频子集的信号相互独立,可获得频率分集,具有分集合并增益 #success([*抗同信道干扰*(补充)])正交跳频图案避免频率复用引起的同频干扰
 
@@ -346,19 +351,19 @@
 
   #kp-mix-box(clr-red, [空间分集]) #success([对抗衰落]);#alert([*STBC空时分组码*]):$mat(c_1, c_2) => mat(c_1, -c_2^*; c_2, c_1^*)$ *等效公式*:$bold(r)=bold(H)bold(c)+bold(n)=mat(r_1; r^*)=mat(h_1, h_2; h_2^*, -h_1^*)mat(c_1; c_2)+mat(n_1; n_2^*)$ *检测*:$tilde(bold(r))=bold(H)^H bold(r)=(|h_1^2|+|h_2^2|)bold(c)+tilde(bold(n))$,再接#success([ML检测]) #info([*多接收*]):线性合并$tilde(bold(r))=sum_(j=1)^(M_r)bold(H)_j^H r_j=(sum_(j=1)^(M_r) ||bold(h)_j||^2)bold(c) + tilde(bold(n))$;*性能*:#info([分集度]) (BER曲线斜率)MRC与STBC相同;#info([分集增益])MRC性能好3dB(STBC中两TX总功率和MRC单Tx功率相同),但因为#success([非对称性])STBC应用广(MRC永远1Tx多Rx)
 
-  #kp-mix-box(clr-red, [空间复用]) #success([提高频谱效率]);#alert([*V-BLAST垂直贝尔实验室分层空时码*]):$(c_1, c_2) => mat(c_1;c_2)$,$bold(r)=bold(H)bold(c)+bold(n)$ *ML*:$tilde(bold(r))=arg min_(hat(bold(c))in bold(C))|bold(r)-bold(H)hat(bold(c))|^2$,需要先验等概+AWGN,最优最复杂
+  #kp-mix-box(clr-red, [空间复用]) #success([提高频谱效率]);#alert([*V-BLAST垂直贝尔实验室分层空时码*]):$(c_1, c_2) => mat(c_1; c_2)$,$bold(r)=bold(H)bold(c)+bold(n)$ *ML*:$tilde(bold(r))=arg min_(hat(bold(c))in bold(C))|bold(r)-bold(H)hat(bold(c))|^2$,需要先验等概+AWGN,最优最复杂
 
   #kp-mix-box(clr-green, [MIMO-OFDM]) MIMO在不增加带宽的条件下成倍提高系统容量和频谱利用率;OFDM把频率选择性衰落信道变成多个子载波的平坦衰落信道,使MIMO在宽带无线通信中发挥其优势
 
   #kp-mix-box(clr-purple, [链路自适应技术]) 系统依据信道的变化动态地调整系统参数,达到性能的最优 AMC(自适应编码调制),ARQ/FEC/HARQ
 
-  #kp-mix-box(clr-green, [区域覆盖]) #success([*小容量大区制*]):建网方式简单,设备成本低,无切换问题,但容量小,功耗与限制大且频谱效率极低;#success([*大容量小区制*]):容量大(频率复用)功耗低且设备小,但网络复杂且存在切换问题
+  #kp-mix-box(clr-green, [区域覆盖]) #success([*小容量大区制*]):一个基站覆盖整个服务区,天线架设高,发射功率大,控制方式简单且设备成本低,但容量小且频谱效率极低;#success([*大容量小区制*]):容量大(频率复用)功耗低且设备小,但网络复杂且存在切换问题
 
   #kp-mix-box(clr-blue, [大容量小区制]) *簇/区群*:共同使用全部可用频率的N个小区叫做一个簇;#success([*簇基本条件*]):基本图案(簇)能彼此邻接且无空隙地覆盖整个面积;#info([相邻簇中,同频小区间距离相等,且为最大]).#success([*频率复用*]):簇内每个小区使用不同的频率组,相邻簇使用相同的频率组;*频率复用和覆盖方式*:带状 面状;*基站对小区覆盖*:中心激励,顶点激励($120degree$)
 
   #kp-mix-box(clr-red, [簇]) $N=i^2 + i j + j^2$,3/4/7/9/12 *信道总数和容量*:$S=K N,C=M S$ M为复制次数;#success([*同频小区确定*]):沿着任意一条六边形边的垂线方向移动i个小区,然后逆时针旋转$60 degree$再移动j个小区;*同频复用距离*:$D=sqrt(3 N)R$;
 
-  #kp-mix-box(clr-red, [同频干扰]) #success([*论述*]):#info([同频干扰是制约系统容量的主要因素]). 同频干扰与频谱利用率是一对矛盾体:在小区半径R不变的情况下,同频复用距离D越小,同频干扰越大,但每个区群的小区数N越小,在单位面积内可复制的区群数越多,所以频谱利用率越高,系统容量越大;同频复用距离D越大,同频干扰越小,每个区群的小区数N越大,在单位面积内可复制的区群数越少,则频谱利用率降低,系统容量越小.#alert([从提高频谱利用率的角度,在保持满意的通信质量的前提下,N应取最小值最好]) #alert([*载干比*]):只考虑第一层干扰$C/I = (sqrt(3 N))^n/L$,$n$为路径损耗指数(4),$L$为同频干扰小区数(全向天线6,定向天线2/3);*同频复用比*:$Q= D/R = sqrt(3N)$,越小容量越大,越大干扰越小
+  #kp-mix-box(clr-red, [同频干扰]) #success([*论述*]):#info([同频干扰是制约系统容量的主要因素]). 同频干扰与频谱利用率是一对矛盾体:在小区半径R不变的情况下,同频复用距离D越小,同频干扰越大,但每个区群的小区数N越小,在单位面积内可复制的区群数越多,所以频谱利用率越高,系统容量越大;同频复用距离D越大,同频干扰越小,每个区群的小区数N越大,在单位面积内可复制的区群数越少,则频谱利用率降低,系统容量越小.#alert([从提高频谱利用率的角度,在保持满意的通信质量的前提下,N应取最小值最好]) #alert([*载干比*]):只考虑第一层干扰$C/I = R^(-n)/(sum_(k=1)^m D_k^(-n)) = (sqrt(3 N))^n/L$,$n$为路径损耗指数(4),$L$为同频干扰小区数(全向天线6,定向天线2/3);*同频复用比*:$Q= D/R = sqrt(3N)$,越小容量越大,越大干扰越小
 
   #kp-mix-box(clr-purple, [蜂窝系统典型干扰]) *噪声*;*同频道干扰*(组网时频率规划);*邻道干扰*:来自相邻或相近信道的干扰,主要因为非理想滤波器(接收滤波器阻带衰减设计;组网时频率规划留有隔离度);*互调干扰*:非线性器件组合频率成分落入本频道(器件的非线性优化;组网频率尽量避开)
 
@@ -373,23 +378,27 @@
   #image("figures/GSM结构.pdf")
   #kp-mix-box(clr-green, [GSM结构]) *MS*:移动台 *BSS*:基站子系统 *NSS*:网络子系统 *OSS*:操作支持子系统 *BTS*:基站收发信台 *BSC*:基站控制器 *MSC*:移动业务交换中心 *VLR*:来访用户位置寄存器 *HLR*:归属用户位置寄存器 *AUC*:鉴权中心 *EIR*:移动设备识别寄存器 *OMC*:操作维护中心 *PSTN*:公用电话网 *ISDN*:综合业务数字网 *PDN*:公用数据网 #success([*功能*]):*MS*移动客户的设备部分;*BSS*:与MS进行通信的系统设备,主要负责完成无线发送接收和无线资源管理等功能;*NSS*:完成GSM系统的交换功能和用于用户数据与移动性管理所需的数据库功能;*OSS*:对整个GSM网络进行管理和监控
 
-  #kp-mix-box(clr-green, [信道]) *物理信道*:用来传送信号或数据的物理通路,每个载频上支持的一个时隙(TS)就是一个物理信道;*逻辑信道*:物理信道上所传输的内容.根据物理信道所传输的信息种类的不同可定义不同的逻辑信道:#alert([业务信道(TCH)和控制信道]);根据所需完成的功能,#success([控制信道])又分为:#alert([广播信道BCH,公共控制信道CCCH,专用控制信道DCCH]);*BCH*:频率校正(FC)同步(S)广播控制(BC);*CCCH*:寻呼(P)随机接入(RA)允许接入(AG)*DCCH*:独立专用(SDC)慢速辅助(SAC)快速辅助(FAC)*TCH*:全/半/增强型全速率
+  #kp-mix-box(clr-green, [信道]) *物理信道*:用来传送信号或数据的物理通路,每个载频上支持的一个时隙(TS)就是一个物理信道;*逻辑信道*:物理信道上所传输的内容.根据物理信道所传输的信息种类的不同可定义不同的逻辑信道:#alert([业务信道(TCH)和控制信道]);根据所需完成的功能,#success([控制信道])又分为:#alert([广播信道BCH,公共控制信道CCCH,专用控制信道DCCH]); *BCH*:频率校正(FC)同步(S)广播控制(BC);*CCCH*:寻呼(P)随机接入(RA)允许接入(AG)*DCCH*:独立专用控制(SDC)慢速辅助控制(SAC)快速辅助控制(FAC)*TCH*:全/半/增强型全速率
 
-  #kp-mix-box(clr-purple, [突发脉冲序列]) *频率矫正*-FCCH;*同步*-SCH;*接入*-RACH;*常规*-除上述三种外其他逻辑信道的序列结构;*空闲*-填空
+  #kp-mix-box(clr-purple, [逻辑映射到物理信道]) *资源*:n个载频$C_k$,每个载频8个时隙$"TS"_0 \~ "TS"_7$;*映射方式*:下行BCH和CCCH在$C_0$的$"TS"_0$上复用;上行RACH在$C_0$的$"TS"_0$上复用;DCCH和SACCH在$C_0$的$"TS"_1$上复用;其余用于业务信道
+
+  #kp-mix-box(clr-green, [突发脉冲序列]) #info([每个时隙中的信息格式])*频率矫正突发脉冲序列*-FCCH的序列结构;*同步*-SCH;*接入*-RACH;*常规*-除上述三种外其他逻辑信道的序列结构;*空闲*-填空
 
   #kp-mix-box(clr-purple, [定时提前量]) *帧偏移*:基站角度上行帧相对下行帧时间上固定后推3个时隙;*时间调整*:移动台角度,如果不时间调整,传输时延使MS之间信息发生重叠;需要时间调整量补偿传播时延,使基站固定3个时隙帧偏移
 
-  #kp-mix-box(clr-purple, [GSM抗衰落技术]) 信道编码(卷积),交织(块内/间),天线分集,均衡(维特比),跳频
+  #kp-mix-box(clr-green, [GSM抗衰落技术]) 信道编码(卷积),交织(块内/间),天线分集,均衡(维特比),跳频,(语音激活与功率控制)
 
   #kp-mix-box(clr-blue, [安全性管理]) 接入网络-鉴权;无线路径-加密;移动设备-设备识别;用户识别码-临时用户识别码TMSI;SIM卡-PIN码保护
 
-  #kp-mix-box(clr-blue, [鉴权]) #alert([*三参数组*]):用于鉴权的随机数RAND,符号响应SRES,密钥$K_c$;#success([*过程*]):MS向网络端发出接入请求;MSC/VLR从AUC获得三参数,把RAND发给MS;MS收到RAND,使用SIM卡中鉴权键$K_i$与$A_3$算法算出SRES($A_8$算$K_c$)并发送回网络端;对比
+  #kp-mix-box(clr-blue, [鉴权]) #alert([*三参数组*]):用于鉴权的随机数RAND,符号响应SRES,密钥$K_c$;#success([*过程*]):MS向网络端发出接入请求;MSC/VLR从AUC获得三参数组(HLR中间临时存储所有用户多组三参数),把RAND发给MS;MS收到RAND,使用SIM卡中鉴权键$K_i$与$A_3$算法算出SRES($A_8$用$K_i$和RAND算$K_c$)并发送回网络端;对比
 
-  #kp-mix-box(clr-purple, [接续管理]) 客户状态(开机空闲,忙,关机);MS主呼;MS被呼
+  #kp-mix-box(clr-purple, [接续管理]) 客户状态(开机空闲:开机$->$位置登记$->$进入空间模式;MS忙,MS关机);MS主呼;MS被呼
 
-  #kp-mix-box(clr-blue, [位置更新]) #success([*概念*]):在MS的实时位置信息已知的情况下更新位置数据库(VLR,HLR)和认证移动台(MS从一个LA到另一个LA#info([强制登记]);MS发现SIM卡中LAI和收到的LAI发生变化就执行登记),位置更新总是由MS启动;*周期性登记*;*越区位置登记*:不同MSC/VLR业务区;同MSC/VLR,不同LA
+  #kp-mix-box(clr-blue, [位置更新]) #success([*概念*]):在MS的实时位置信息已知的情况下更新位置数据库(VLR,HLR)和认证移动台(MS从一个LA到另一个LA#info([强制登记]) ;一旦MS发现SIM卡中LAI和收到的LAI发生变化就执行登记),位置更新总是由MS启动;*强制登记*:周期性登记,越区位置登记
 
-  #kp-mix-box(clr-blue, [越区切换]) *GSM硬切换*:在切换过程中会发生短时中断(CDMA软);*切换方式*:移动台辅助的切换;*切换触发准则*:具有滞后余量和门限规定的相对信号强度准则;*切换流程*:同BSC控制区不同cell;同MSC业务区不同BSC;不同BSC
+  #kp-mix-box(clr-blue, [越区位置登记]) *不同MSC/VLR业务区*:MS越区移动,发现需要进行位置更新;MS通过BSC向MSC2发送位置更新请求;MSC2将IMSI/号码/位置等信息发送给HLR;HLR返回响应消息,然后VLR2注册客户信息,同时MSC2向MS发送位置更新确认,MS确认后更新SIM卡中LAI;最后HLR通知VLR1删除已经离开的MS相关信息;*同MSC/VLR不同LA*:MS发现需要位置更新,通过新的BS将更新消息发送给MSC;MSC得知仍然属于本业务区,通知HLR,得到确认信息后VLR修改客户数据,向MS发送更新确认
+
+  #kp-mix-box(clr-blue, [越区切换]) *GSM硬切换*:在切换过程中会发生短时中断(CDMA软);*切换方式*:移动台辅助的切换;*切换触发准则*:具有滞后余量和门限规定的相对信号强度准则;*切换阶段*:测量和目标小区确定$->$切换触发$->$切换执行;*划分*:同BSC控制区不同cell;同MSC业务区不同BSC;不同MSC
 
   #kp-mix-box(clr-purple, [5G技术]) 大规模天线,新型多址,超密集组网,高频段通信
 
