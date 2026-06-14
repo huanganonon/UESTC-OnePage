@@ -59,6 +59,7 @@
 // 数学字体微调,设置无衬线字体
 #show math.equation: set text(font: (
   "Fira Math",
+  "Inter",
   "Source Han Sans",
 ))
 
@@ -130,7 +131,7 @@
     inset: 0pt,
     outset: 0pt,
     [
-      ab
+      #image("figures/Viterbi.excalidraw.svg")
     ],
   ),
 )
@@ -278,7 +279,7 @@
 
   #kp-mix-box(clr-blue, [瑞利衰落]) 离基站远且反射物丰富,#info([无直射波,各反射波幅度和相位独立]).*本质*:经N条独立的衰落路径到达接收端.接收#info([信号包络])$r(t) = sum_(i=0)^N alpha_i exp(-j phi_i)s(t-tau_i)$*1.直角坐标*:定义同相分量 $T_C (t) = Re(r(t))$,正交分量 $T_S (t) = Im(r(t))$.由中心极限定理,当$N arrow.r infinity$时$T_C,T_S \~ N(0,sigma^2)$,$sigma_C^2 = sigma_S^2 = sigma^2$.其联合概率密度 $p(T_C, T_S) = p(T_C) dot p(T_S) = 1/(2 pi sigma^2) exp(-(T_C^2+T_S^2)/(2 sigma^2))$.*2.坐标变换*:转为极坐标(包络 $r$,相位 $theta$), $T_C = r cos theta, T_S = r sin theta$.雅可比行列式 $|J| = |partial(T_C, T_S)/partial(r, theta)| = r$.新坐标系联合PDF $p_(r,theta)(r,theta) = p(T_C,T_S) dot |J| = r/(2 pi sigma^2) exp(-r^2/(2 sigma^2))$.*3.边缘PDF*:*包络r*:$p_r (r) = integral_0^(2 pi) p_(r,theta) d theta = r/sigma^2 exp(-r^2/(2 sigma^2))$(*瑞利分布*, $r >= 0$);*相位* $theta$:在 $(0,infinity)$ 对 $r$ 积分, $p_theta (theta) = 1/(2 pi)$ (*均匀分布*, $theta in (0,2 pi)$).
 
-  #kp-mix-box(clr-blue, [莱斯衰落]) 多径信道中#info([某路信号较强且占支配地位]).*莱斯因子*:主信号功率与多径分量方差之比,即 $K = A^2/(2 sigma^2)$.$A arrow.r 0$且$K arrow.r 0$时,无直射分量,莱斯分布退化为*瑞利分布*(衰落最严重);$A^2/(2 sigma^2) arrow.r infinity$且$K arrow.r infinity$时,直射波极强,莱斯分布向*高斯分布*趋近(衰落最轻).
+  #kp-mix-box(clr-blue, [莱斯衰落]) 多径信道中#info([某路信号较强且占支配地位]).#info([*莱斯因子*]):主信号功率与多径分量方差之比,即 $K = A^2/(2 sigma^2)$.$A arrow.r 0$且$K arrow.r 0$时,无直射分量,莱斯分布退化为*瑞利分布*(衰落最严重);$A^2/(2 sigma^2) arrow.r infinity$且$K arrow.r infinity$时,直射波极强,莱斯分布向*高斯分布*趋近(衰落最轻).
   // ? *PDF公式*:当 $r >= 0$ 时, $p(r) = r/sigma^2 exp(-(r^2+A^2)/(2 sigma^2)) I_0((A^2)/sigma^2)$,$r < 0$时$p(r) = 0$.($A$为主信号峰值,其功率$A^2/2$; $r$为包络;$sigma^2$为$r$的方差;$I_0(dot)$为0阶第一类修正贝塞尔函数).
 
   #kp-mix-box(clr-blue, [时延扩展]) 各多径分量附加时延为$tau_i$,对应接收功率为 $P(tau_i)$.*平均附加时延*:$overline(tau) = (sum_i a_i^2 tau_i)/(sum_i a_i^2) = (sum_i P(tau_i) tau_i) / (sum_i P(tau_i))$;*均方根时延扩展*: $sigma_tau = sqrt(overline(tau^2) - (overline(tau))^2)$,其中$overline(tau^2) = (sum_i P(tau_i) tau_i^2) / (sum_i P(tau_i))$ ($overline(tau^2)$是先平方再加权平均);注意是#info([数值运算])
@@ -343,7 +344,7 @@
 
   #kp-mix-box(clr-blue, [m序列]) 特征多项式-最长线性反馈移位寄存器-周期$N=2^m-1$(除去全0) #info([*平衡特性*]):完整N内1比0多一个 #info([*游程特性*]):N内连续0/1序列称为一个游程;N内游程总数$L = (N+1)/2$;长度为$l$的游程数$ceil(L/2^l)$;最长游程是m个连1 #info([*相关特性*]):两序列a,b#info([模2相加]),0数目为A,1数目为D $R_(a,b)=(A-D)/(A+D)$;#info([自相关函数])$R_(a, a)(n) = cases(1 &", " n = l N \, l = 0\, plus.minus 1\, ..., -1/N &", 其余 " n)$ #alert([*计算*]):原$b(t)$扩展N后#success([异或])$G=N$
 
-  #kp-mix-box(clr-red, [DS]) *参数*:扩展倍数$N= B_c/B_b = T_b/T_c$实际扩展为$B_c + B_b$ *2PSK下*:$G_p= P_i/P_o = N$ #success([*抗窄带干扰*]):发端扩频,信号频谱展宽,功率谱密度降低;受到干扰;信号解扩恢复为窄带,功率谱密度上升,同时干扰频谱被扩展,其功率谱密度下降;经窄带滤波,信道内干扰功率大幅下降;#success([*抗衰落*]):#alert([抗频率选择性失真]) (抗衰落):扩频码的#info([码片时间小于多径时延差(频谱扩展宽度远大于信道相关带宽)])时,可利用扩频码的自相关特性进行相关解扩,提取所需要的主径信号,抑制多径干扰(频率分集增益) #alert([抗SNR损耗]) (抗多径):利用RAKE接收,可以区分#success([多径时延差大于码片周期(多径可分离)])的各条多径信号并合并,即时间/多径分集,具有分集合并增益 #success([*RAKE接收*]):用扩频码的相关特性进行多径分离与合并,实现时间分集;*要求*:#alert([两径时延差大于Chip周期]);*绘图*:#info([多径矢量合成])三角$->$单向,#info([接收机示意图])见右上角
+  #kp-mix-box(clr-red, [DS]) *参数*:扩展倍数$N= B_c/B_b = T_b/T_c$实际扩展为$B_c + B_b$ *2PSK下*:$G_p= P_i/P_o = N$ #success([*抗窄带干扰*]):发端扩频,信号频谱展宽,功率谱密度降低;受到干扰;信号解扩恢复为窄带,功率谱密度上升,同时干扰频谱被扩展,其功率谱密度下降;经窄带滤波,信道内干扰功率大幅下降;#success([*抗衰落*]):#alert([抗频率选择性失真]) (抗衰落):扩频码的#info([码片时间小于多径时延差(频谱扩展宽度远大于信道相关带宽)])时,可利用#success([扩频码的自相关特性])进行相关解扩,提取所需要的主径信号,抑制多径干扰(频率分集增益) #alert([抗SNR损耗]) (抗多径):利用RAKE接收,可以区分#success([多径时延差大于码片周期(多径可分离)])的各条多径信号并合并,即时间/多径分集,具有分集合并增益 #success([*RAKE接收*]):用扩频码的相关特性进行多径分离与合并,实现时间分集;*要求*:#alert([两径时延差大于Chip周期]);*绘图*:#info([多径矢量合成])三角$->$单向,#info([接收机示意图])见右上角
 
   #kp-mix-box(clr-red, [FH]) *概念*:载波信号的频率随时间变化,#info([靠躲避干扰来提升抗干扰性能]),本质是频率分集 *参数*:$G_H = W/B = N$即跳频点数 #success([*抗衰落*]):#alert([抗频率选择性失真]) (抗多径):在#info([多径信号没有到来之前(跳频周期小于多径时延差)])接收机已开始接收下一跳信号,但需以提高跳频速率为代价(快跳频) #alert([抗SNR损耗]) (抗衰落):#info([跳频总带宽大于信道相干带宽(也可理解为跳频频率间隔大于信道相干带宽)])时,若将相关的跳频频点作为一个跳频子集,不同跳频子集的信号相互独立,可获得频率分集,具有分集合并增益 #success([*抗同信道干扰*(补充)])正交跳频图案避免频率复用引起的同频干扰
 
