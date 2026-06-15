@@ -155,7 +155,7 @@
       fill: none,
       inset: 0em,
       outset: 0em,
-      stroke: (dash: "dashed", paint: green, thickness: 0.5pt),
+      stroke: (dash: "dashed", paint: green, thickness: 0pt),
       [
         #content
       ],
@@ -175,51 +175,56 @@
     width: title-left - safe-left,
     height: name-top-up - safe-top, // 留出一点空隙
     fill: none,
-    stroke: (dash: "dashed", paint: blue, thickness: 0.4pt),
+    stroke: (dash: "dashed", paint: blue, thickness: 0pt),
     inset: 0pt,
     outset: 0pt,
     [
-      #image("figures/Viterbi.excalidraw.svg")
+      #image("figures/Viterbi.excalidraw.svg", width: 70%)
     ],
   ),
 )
 
 // 顶部空余
 #place(
-  dx: title-left - safe-left + 0.3mm,
+  dx: title-left - safe-left - 16mm,
   dy: 0mm,
   clearance: 0em,
   rect(
-    width: title-right - title-left - 0.6mm,
+    width: title-right - title-left - 0.6mm + 41mm,
     height: stamp-top - safe-top - 0.5mm, // 留出一点空隙
     fill: none,
-    stroke: (dash: "dashed", paint: purple, thickness: 0.4pt),
+    stroke: (dash: "dashed", paint: purple, thickness: 0pt),
     inset: 0pt,
     outset: 0pt,
     [
       #text(
-        size: 6pt,
-      )[#kp-mix-box(clr-purple, [移动通信的特点]) 频谱拥挤/频谱需严格菅理;电波传播存在衰落/多径等问题;面临环境的干扰和噪声;存在高速移动和大动态范围的要求;对移动台体积/重量/功耗的要求高;系统复杂,系统需组网,网络需有越区切换/漫游等功能
-        #kp-mix-box(clr-purple, [无线电波传播方式]) *地波*(沿地球表面传播,低频/长波,传播距离远/较稳定);*天波*(靠电离层反射传播,高频/短波,用于远距离短波通信);*视距/对流层*(在对流层内沿直线或散射传播,超短波/微波,距离受视线限制);*卫星*(穿透电离层,利用卫星中继传输,微波,距离远、覆盖大)]
-
+        size: 5.7pt,
+      )[#par(
+        leading: 0.4em,
+      )[
+        #kp-mix-box(clr-purple, [移动通信特点]) 频谱拥挤/频谱需严格菅理;电波传播存在衰落/多径等问题;面临环境的干扰和噪声;存在高速移动和大动态范围的要求;对移动台体积/重量/功耗的要求高;系统复杂,系统需组网,网络需有越区切换/漫游等功能
+        #kp-mix-box(clr-purple, [电波传播方式]) *地波*(沿地球表面传播,低频/长波,传播距离远/较稳定);*天波*(靠电离层反射传播,高频/短波,用于远距离短波通信);*视距/对流层*(在对流层内沿直线或散射传播,超短波/微波,距离受视线限制);*卫星*(穿透电离层,利用卫星中继传输,微波,距离远/覆盖大)
+        #kp-mix-box(clr-purple, [多址特点]) *FDMA*:每信道占用一载频(窄带,载波间隔满足业务信息要求,每频道传输一业务信息);MS实现简单(频带窄时无需自适应均衡);基站复杂庞大(多收发支持多用户);需周密的频率规划;越区切换复杂(切换瞬时信息可能丢失)*TDMA*:同步开销大,突发传输速率高于语音编码速率;通带为宽带告诉;要增加系统支持时隙数,需增加发射信号速率;基站复杂性减少,无需双工器;干扰较小,频谱利用效率高;越区切换简单,不会丢失数据*CDMA*:各用户地址码准正交性带来多址干扰(类白噪声);多用户共享频率;容量相对较大;容量软特性,用户增加相当于噪声增加;用扩频和RAKE接收,减少多径衰落影响;单频组网,相邻小区频率相同,平滑软切换;低信号功率谱密度,抗干扰能力强
+      ]]
     ],
   ),
 )
 
 // 右上角框
 #place(
-  dx: title-right - safe-left,
+  // dx: title-right - safe-left,
+  dx: title-right - safe-left + 17mm,
   dy: 0mm,
   clearance: 0em,
   rect(
     width: title-left - safe-left,
     height: name-top-up - safe-top, // 留出一点空隙
     fill: none,
-    stroke: (dash: "dashed", paint: blue, thickness: 0.4pt),
+    stroke: (dash: "dashed", paint: blue, thickness: 0pt),
     inset: 0pt,
     outset: 0pt,
     [
-      #image("figures/RAKE.pdf")
+      #image("figures/RAKE.pdf", width: 80%)
     ],
   ),
 )
@@ -233,11 +238,11 @@
     width: seal-left,
     height: attention-top - name-top, // 留出一点空隙
     fill: none,
-    stroke: (dash: "dashed", paint: blue, thickness: 0.4pt),
+    stroke: (dash: "dashed", paint: blue, thickness: 0pt),
     inset: 0pt,
     outset: 0pt,
     [
-      #image("figures/自绘-窄带.pdf", width: 32%)
+      #box(image("figures/自绘-窄带.pdf", width: 32%)) #box(image("figures/蜂窝.pdf"))
     ],
   ),
 )
@@ -272,7 +277,13 @@
 )[
   #kp-mix-box(clr-green, [移动通信]) *广义*:通信双方或至少其中一方在运动状态中(或临时静止状态)进行信息交互的通信方式;采用电磁波为传输媒介的无线通信*狭义*:蜂窝移动通信系统
 
-  #kp-mix-box(clr-green, [1-4代系统]) *1代(模拟/窄带)* #success([主要多址技术:])FDMA  #success([质量:])较差 #success([业务:])语音通信  #success([代表:])AMPS(美国)TACS(欧洲)*2代(数字/窄带)*  FDMA/TDMA/CDMA;较好;语音为主,数字为辅;GSM(欧洲)IS-95(Qualcomm)*3代(数字/宽带)*(多模式多频) CDMA;好;数字语音多媒体;WCDMA(欧/日)cdma 2000(北美)TD-SCDMA(中国)*4代(数字/宽带)* OFDMA/SC-FDMA;好;数字语音多媒体;LTE-A   #kp-mix-box(clr-purple, [WiMAX LTE技术]) OFDMA,子信道自适应调制和编码(AMC),混合自动重传请求(H-ARQ),多输入多输出(MIMO),纯 IP 核心网
+  #text(size: 6.6pt)[
+    #par(leading: 0.6em)[
+      #kp-mix-box(clr-green, [1-4代系统]) *1代(模拟/窄带)* #success([主要多址技术:])FDMA  #success([质量:])较差 #success([业务:])语音通信  #success([代表:])AMPS(美国)TACS(欧洲)*2代(数字/窄带)*  FDMA/TDMA/CDMA;较好;语音为主,数字为辅;GSM(欧洲)IS-95(Qualcomm)*3代(数字/宽带)*(多模式多频) CDMA;好;数字语音多媒体;WCDMA(欧/日)cdma 2000(北美)TD-SCDMA(中国)*4代(数字/宽带)* OFDMA/SC-FDMA;好;数字语音多媒体;LTE-A *5GNR*:上行OFDMA为主,SC-FDMA辅助,下行OFDMA  #kp-mix-box(clr-purple, [WiMAX LTE技术]) OFDMA,子信道自适应调制和编码(AMC),混合自动重传请求(H-ARQ),多输入多输出(MIMO),纯 IP 核心网
+    ]
+  ]
+
+
 
   #kp-mix-box(clr-blue, [工作方式]) *单工*:收发交替进行.同频/异频单工;*半双工*:基站双工,移动台异频单工;*双工*:同时工作 #success([*FDD*]) (频分双工,不同频率收发,有保护频带):需成对频率,频带宽,适合对称业务(不对称时频谱利用率低);技术简单;收发有保护频带间隔,抗干扰能力强;覆盖范围大,设备成本高.#success([*TDD*]) (时分双工,不同时隙收发,有保护时间):不需成对频率,频带窄,支持不对称业务,便于频谱分配,频谱利用率高;需更复杂的网络规划和优化;通过保护时间隔离,易形成同频干扰;收发同一频段,上下行信道特性一致,便于采用智能天线技术;覆盖范围小,需要更大的发送功率;设备成本降低.
 
@@ -328,7 +339,6 @@
 
   #kp-mix-box(clr-green, [CP]) #text(size: 7.1pt)[消除ISI/ICI,符号前插保护间隔,ZP破坏正交性导致ICI]
 
-  // ? #kp-mix-box(clr-purple, [信道估计]) 块状导频频率上连续,梳状导频时间上连续.峰均比 PAPR,定义公式为 $"PAPR" = max(|s(t)|^2) / E(|s(t)|^2)$,当子载波数 $N$ 很大时时域信号近似服从高斯分布.抑制 PAPR 核心方法对比:限幅限制峰值附近信号幅度,实现简单但破坏正交性,且带外干扰;编码增加冗余,选择小PAPR码字,无失真但谱效降低且复杂度高；加扰用扰码降低信号同相叠加概率,无失真但需要额外信息且复杂度高;预失真进入放大器之前预先补偿失真,让放大之后无失真,本质没有抑制PAPR,补偿程度有限.
 
   #kp-mix-box(clr-blue, [OFDM优缺点]) *优点*:正交子载波频谱重叠交叉使频谱利用率高;串并转换减小符号速率,抗多径干扰与抗窄带衰落能力强;FFT/IFFT实现降低复杂度;CP克服多径带来的ISI;能获取等效频率单径信道,更适于MIMO传输;降低对时间同步的要求.*缺点*:频偏敏感,频偏容易使得正交性被破坏;高PAPR,多个子信道叠加,对器件要求高
 
@@ -377,7 +387,9 @@
   #kp-mix-box(clr-red, [空间复用]) #success([提高频谱效率]);#alert([*V-BLAST垂直贝尔实验室分层空时码*]):$(c_1, c_2) => mat(c_1; c_2)$,$bold(r)=bold(H)bold(c)+bold(n)$ *ML*:$tilde(bold(r))=arg min_(hat(bold(c))in bold(C))|bold(r)-bold(H)hat(bold(c))|^2$,需要先验等概+AWGN,最优最复杂$max_(hat(bold(c))in bold(C)) p(hat(bold(c))|bold(r)) limits(==>)^("贝叶斯") (p(bold(r)|hat(bold(c)))p(hat(bold(c))))/p(bold(r)) limits(==>)^("等概") max p(bold(r)|hat(bold(c))) limits(==>)^("高斯") max 1 / sqrt(pi N_0) exp(- norm(bold(r) - bold(H) hat(bold(c)))^2 / N_0)$
 
   #kp-mix-box(clr-green, [MIMO-OFDM]) MIMO在不增加带宽的条件下成倍提高系统容量和频谱利用率;OFDM把频率选择性衰落信道变成多个子载波的平坦衰落信道,使MIMO在宽带无线通信中发挥其优势
-  #kp-mix-box(clr-purple, [链路自适应技术]) 系统依据信道的变化动态调整系统参数,达到性能的最优 *物理层*:自适应调制编码AMC,功率/速率/错误控制;*链路层*:混合自动重传请求HARQ,ARQ/FEC;*网络层*:跨层协作
+  #kp-mix-box(clr-purple, [链路自适应技术]) #text(
+    size: 6.2pt,
+  )[系统依据信道的变化动态调整系统参数,达到性能的最优 *物理层*:自适应调制编码AMC,功率/速率/错误控制;*链路层*:混合自动重传请求HARQ,ARQ/FEC;*网络层*:跨层协作]
 
   #kp-mix-box(clr-green, [区域覆盖]) #success([*小容量大区制*]):一个基站覆盖整个服务区,天线架设高,发射功率大,控制方式简单且设备成本低,但容量小且频谱效率极低;#success([*大容量小区制*]):容量大(频率复用)功耗低且设备小,但网络复杂且存在切换问题
 
@@ -387,7 +399,11 @@
 
   #kp-mix-box(clr-red, [同频干扰]) #success([*论述*]):#info([同频干扰是制约系统容量的主要因素]). 同频干扰与频谱利用率是一对矛盾体:在小区半径R不变的情况下,同频复用距离D越小,同频干扰越大,但每个区群的小区数N越小,在单位面积内可复制的区群数越多,所以频谱利用率越高,系统容量越大;同频复用距离D越大,同频干扰越小,每个区群的小区数N越大,在单位面积内可复制的区群数越少,则频谱利用率降低,系统容量越小.#alert([从提高频谱利用率的角度,在保持满意的通信质量的前提下,N应取最小值最好]);*同频复用比*:$Q= D/R = sqrt(3N)$,越小容量越大,越大干扰越小;#alert([*载干比*]):只第一层干扰$C/I = R^(-n)/(sum_(k=1)^m D_k^(-n)) = (sqrt(3 N))^n/L$,$n$路径损耗指数(4),$L$同频干扰小区数(全向天线6,定向2/3);
 
-  #kp-mix-box(clr-purple, [蜂窝系统典型干扰]) *噪声*;*同频道干扰*(组网时频率规划);*邻道干扰*:来自相邻或相近信道的干扰,主要因为非理想滤波器(接收滤波器阻带衰减设计;组网时频率规划留有隔离度);*互调干扰*:非线性器件组合频率成分落入本频道(器件的非线性优化;组网频率尽量避开)
+  #text(size: 6.5pt)[#par(leading: 0.5em)[
+    #kp-mix-box(clr-purple, [蜂窝系统典型干扰]) *噪声*;*同频道干扰*(组网时频率规划);*邻道干扰*:来自相邻或相近信道的干扰,主要因为非理想滤波器(接收滤波器阻带衰减设计;组网时频率规划留有隔离度);*互调干扰*:非线性器件组合频率成分落入本频道(器件的非线性优化;组网频率尽量避开)
+  ]]
+
+
 
   #kp-mix-box(clr-green, [通信容量]) *定义*:每个小区的可用信道数,即每小区允许同时工作的用户数;单位面积内可允许同时工作的用户数; *通用公式*:#success([$m= B_t/(B_c N) ("信道/小区")$]),$B_t$:信道总带宽,$B_c$单个信道等效带宽,$N$频率复用因子,#info([容量取决于载干比和总带宽])
 
@@ -416,21 +432,38 @@
 
   #kp-mix-box(clr-green, [GSM抗衰落技术]) 信道编码(卷积),交织(块内/间),天线分集,均衡(维特比),跳频,(语音激活与功率控制)
 
-  #kp-mix-box(clr-blue, [安全性管理]) 接入网络-鉴权;无线路径-加密;移动设备-设备识别;用户识别码-临时用户识别码TMSI;SIM卡-PIN码保护
-  #kp-mix-box(clr-blue, [鉴权]) #alert([*三参数组*]):用于鉴权的随机数RAND,符号响应SRES,密钥$K_c$;#success([*过程*]):MS向网络端发出接入请求;MSC/VLR从AUC获得三参数组(HLR中间临时存储所有用户多组三参数),把RAND发给MS;MS收到RAND,使用SIM卡中鉴权键$K_i$与$A_3$算法算出SRES($A_8$用$K_i$和RAND算$K_c$)并发送回网络端;对比SRES,判断是否能够接入
 
-  #kp-mix-box(clr-purple, [接续管理]) 客户状态(开机空闲:开机$->$位置登记$->$进入空间模式;MS忙,MS关机);MS主呼;MS被呼
 
-  #kp-mix-box(clr-blue, [位置更新]) #success([*概念*]):在MS的实时位置信息已知的情况下更新位置数据库(VLR,HLR)和认证移动台(MS从一个LA到另一个LA#info([强制登记]) ;一旦MS发现SIM卡中LAI和收到的LAI发生变化就执行登记),位置更新总是由MS启动;*强制登记*:周期性登记,越区位置登记
-  #kp-mix-box(clr-blue, [越区位置登记]) *不同MSC/VLR业务区*:MS越区移动,发现需要进行位置更新;MS通过BSC向MSC2发送位置更新请求;MSC2将IMSI/号码/位置等信息发送给HLR;HLR返回响应消息,然后VLR2注册客户信息,同时MSC2向MS发送位置更新确认,MS确认后更新SIM卡中LAI;最后HLR通知VLR1删除已经离开的MS相关信息;*同MSC/VLR不同LA*:MS发现需要位置更新,通过新的BS将更新消息发送给MSC;MSC得知仍然属于本业务区,通知HLR,得到确认信息后VLR修改客户数据,向MS发送更新确认
+  #text(size: 7pt)[#par(
+    leading: 0.4em,
+  )[
+    #kp-mix-box(clr-blue, [安全性管理]) 接入网络-鉴权;无线路径-加密;移动设备-设备识别;用户识别码-临时用户识别码TMSI;SIM卡-PIN码保护
+    #kp-mix-box(clr-blue, [鉴权]) #alert([*三参数组*]):用于鉴权的随机数RAND,符号响应SRES,密钥$K_c$;#success([*过程*]):MS向网络端发出接入请求;MSC/VLR从AUC获得三参数组(HLR中间临时存储所有用户多组三参数),把RAND发给MS;MS收到RAND,使用SIM卡中鉴权键$K_i$与$A_3$算法算出SRES($A_8$用$K_i$和RAND算$K_c$)并发送回网络端;对比SRES,判断是否能够接入
+    #text(
+      size: 6.5pt,
+    )[#kp-mix-box(clr-purple, [接续管理]) 客户状态(开机空闲:开机$->$位置登记$->$进入空间模式;MS忙,MS关机);MS主呼;MS被呼]
+  ]]
+
+  #text(size: 6.9pt)[#par(
+    leading: 0.5em,
+  )[
+    #kp-mix-box(clr-blue, [位置更新]) #success([*概念*]):在MS的实时位置信息已知的情况下更新位置数据库(VLR,HLR)和认证移动台(MS从一个LA到另一个LA#info([强制登记]) ;一旦MS发现SIM卡中LAI和收到的LAI发生变化就执行登记),位置更新总是由MS启动;*强制登记*:周期性登记,越区位置登记
+    #kp-mix-box(clr-blue, [越区位置登记]) *不同MSC/VLR业务区*:MS越区移动,发现需要进行位置更新;MS通过BSC向MSC2发送位置更新请求;MSC2将IMSI/号码/位置等信息发送给HLR;HLR返回响应消息,然后VLR2注册客户信息,同时MSC2向MS发送位置更新确认,MS确认后更新SIM卡中LAI;最后HLR通知VLR1删除已经离开的MS相关信息;*同MSC/VLR不同LA*:MS发现需要位置更新,通过新的BS将更新消息发送给MSC;MSC得知仍然属于本业务区,通知HLR,得到确认信息后VLR修改客户数据,向MS发送更新确认
+  ]]
+
+
 
   #text(size: 6.4pt)[#par(
-    leading: 0.6em,
+    leading: 0.5em,
   )[#kp-mix-box(clr-blue, [越区切换]) *GSM硬切换*:在切换过程中会发生短时中断(CDMA软);*切换方式*:移动台辅助的切换;*切换触发准则*:具有滞后余量和门限规定的相对信号强度准则;*切换阶段*:测量和目标小区确定$->$切换触发$->$切换执行#kp-mix-box(clr-purple, [切换流程]) *同BSC控制区不同cell*:MS向BSC汇报原5基站和周围基站信号强度;BSC发出切换命令;MS切换到新TCH信道并通知BSC;BSC通知MSC/VLR该MS完成切换;如位置改变需要进行位置更新.*同MSC业务区不同BSC*:MS$->$BSC1$->$MSC$->$BSC2$->$MSC$->$BSC1$->$MS$->$BSC2$->$MSC$->$BSC1$->$MSC(LA更新).*不同MSC*:MS$->$BSC1$->$MSC1$->$MSC1和MSC2建立连接并发出切换命令,MS完成切换$->$BSC2$->$MSC2(HON号码)$->$MSC1]]
 
   #text(size: 6.5pt)[#par(
     leading: 0.5em,
-  )[#kp-mix-box(clr-purple, [5G]) *优势*:峰值速率1G到10G;体验速率10M到100M;频谱效率提高3倍;支持移动性350km/h到500;时延10ms到1ms;没平方公里连接数10万到100万;网络能效提升100倍;区域流量0.1M$"bps/"m^2$到10M;*技术*:大规模天线,新型多址,超密集组网,高频段通信;全双工;FBMC;灵活双工;新型调制编码;D2D;频谱共享]]
+  )[#kp-mix-box(clr-purple, [5G]) *优势*:峰值速率1G到10G;体验速率10M到100M;频谱效率提高3倍;支持移动性350km/h到500;时延10ms到1ms;没平方公里连接数10万到100万;网络能效提升100倍;区域流量0.1M$"bps/"m^2$到10M;*技术*:大规模天线,新型多址,超密集组网,高频段通信;全双工;FBMC;灵活双工;新型调制编码;D2D;频谱共享
+    #kp-mix-box(clr-purple, [核心频段]) *HF*(短波/高频)$->$*VHF*(超短/甚高)30\~300MHz$->$*UHF*:(分米波/超高频)0.3\~3GHz,1m\~10cm(蜂窝移动核心,4G/5G低频)$->$*SHF*(厘米/特高)(5G厘米波/WIFI)$->$*EHF*(毫米波/极高频)(5G毫米波/6G)
+    #kp-mix-box(clr-purple, [信道估计]) 块状导频频率上连续,梳状导频时间上连续.峰均比 PA PR $"PAPR" = max(|s(t)|^2) / E(|s(t)|^2)$,当子载波数 $N$ 很大时时域信号近似服从高斯分布.抑制 PAPR 核心方法对比:限幅限制峰值附近信号幅度,实现简单但破坏正交性,且带外干扰;编码增加冗余,选择小PAPR码字,无失真但谱效降低且复杂度高；加扰用扰码降低信号同相叠加概率,无失真但需要额外信息且复杂度高;预失真进入放大器之前预先补偿失真,让放大之后无失真,本质没有抑制PAPR,补偿程度有限.
+    #kp-mix-box(clr-purple, [各代系统信道编码]) 检错基本都用CRC *GSM/IS-95*:卷积码*3G*:话音卷积码,数据卷积/turbo码*4G*:话音卷积码,数据:卷积/turbo/LDPC码*5G*:长码LDPC码,短码Polar码
+  ]]
 
   // #kp-mix-box(clr-purple, [切换流程]) *同BSC控制区不同cell*:MS向BSC汇报原5基站和周围基站信号强度;BSC发出切换命令;MS切换到新TCH信道并通知BSC;BSC通知MSC/VLR该MS完成切换;如位置改变需要进行位置更新.*同MSC业务区不同BSC*:MS$->$BSC1$->$MSC$->$BSC2$->$MSC$->$BSC1$->$MS$->$BSC2$->$MSC$->$BSC1$->$MSC(LA更新).*不同MSC*:MS$->$BSC1$->$MSC1$->$MSC1和MSC2建立连接并发出切换命令,MS完成切换$->$BSC2$->$MSC2(HON号码)$->$MSC1
 
