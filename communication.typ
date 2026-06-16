@@ -190,7 +190,7 @@
   dy: 0mm,
   clearance: 0em,
   rect(
-    width: title-right - title-left - 0.6mm + 41mm,
+    width: title-right - title-left - 0.6mm + 40mm,
     height: stamp-top - safe-top - 0.5mm, // 留出一点空隙
     fill: none,
     stroke: (dash: "dashed", paint: purple, thickness: 0pt),
@@ -204,7 +204,7 @@
       )[
         #kp-mix-box(clr-purple, [移动通信特点]) 频谱拥挤/频谱需严格菅理;电波传播存在衰落/多径等问题;面临环境的干扰和噪声;存在高速移动和大动态范围的要求;对移动台体积/重量/功耗的要求高;系统复杂,系统需组网,网络需有越区切换/漫游等功能
         #kp-mix-box(clr-purple, [电波传播方式]) *地波*(沿地球表面传播,低频/长波,传播距离远/较稳定);*天波*(靠电离层反射传播,高频/短波,用于远距离短波通信);*视距/对流层*(在对流层内沿直线或散射传播,超短波/微波,距离受视线限制);*卫星*(穿透电离层,利用卫星中继传输,微波,距离远/覆盖大)
-        #kp-mix-box(clr-purple, [多址特点]) *FDMA*:每信道占用一载频(窄带,载波间隔满足业务信息要求,每频道传输一业务信息);MS实现简单(频带窄时无需自适应均衡);基站复杂庞大(多收发支持多用户);需周密的频率规划;越区切换复杂(切换瞬时信息可能丢失)*TDMA*:同步开销大,突发传输速率高于语音编码速率;通带为宽带告诉;要增加系统支持时隙数,需增加发射信号速率;基站复杂性减少,无需双工器;干扰较小,频谱利用效率高;越区切换简单,不会丢失数据*CDMA*:各用户地址码准正交性带来多址干扰(类白噪声);多用户共享频率;容量相对较大;容量软特性,用户增加相当于噪声增加;用扩频和RAKE接收,减少多径衰落影响;单频组网,相邻小区频率相同,平滑软切换;低信号功率谱密度,抗干扰能力强
+        #kp-mix-box(clr-purple, [多址特点]) *FDMA*:每信道占用一载频(窄带,载波间隔满足业务信息要求,每频道传输一业务信息);MS实现简单(频带窄时无需自适应均衡);基站复杂庞大(多收发支持多用户);需周密的频率规划;越区切换复杂(切换瞬时信息可能丢失)*TDM A*:同步开销大,突发传输速率高于语音编码速率;通带为宽带告诉;要增加系统支持时隙数,需增加发射信号速率;基站复杂性减少,无需双工器;干扰较小,频谱利用效率高;越区切换简单,不会丢失数据*CDMA*:各用户地址码准正交性带来多址干扰(类白噪声);多用户共享频率;容量较大;容量软特性,用户增加相当噪声增加;用扩频和RAKE接收,减少多径衰落影响;单频组网,相邻小区频率相同,平滑软切换;低信号功率谱密度,抗干扰能力强
       ]]
     ],
   ),
@@ -242,7 +242,7 @@
     inset: 0pt,
     outset: 0pt,
     [
-      #box(image("figures/自绘-窄带.pdf", width: 32%)) #box(image("figures/蜂窝.pdf"))
+      #box(image("figures/自绘-窄带.pdf", width: 32%)) #box(image("figures/蜂窝3.pdf")) #box(image("figures/蜂窝.pdf"))
     ],
   ),
 )
@@ -365,11 +365,10 @@
   #kp-mix-box(clr-blue, [横向滤波线性均衡器]) $y_n = sum_(k=-N)^N c_k x_(n-k) <=> Y(z) = X(z)E(z)$,$X(z) = sum_(k=-N)^N x_k z^(-k)$,$E(z) = sum_(k=-N)^N c_k z^(-k)$,输出$y_n$,输入$x_n$,均衡$c_n$
 
   #kp-mix-box(clr-red, [迫零算法]) #info([*最小峰值误差准则*])$D = 1 / y_0 sum_(mat(k = -infinity; k != 0))^infinity |y_k|$,使码间干扰峰值最小 *算法*:$x$代入初始畸变$D_0<1$时,迫零可得到$N$阶(#info([$2N+1$抽头]))下最优解.$y_n = cases(1 &", " n = 0, 0 &", " n = plus.minus 1\, ...\, plus.minus N)$$quad bold(y) = bold(x) bold(c) => bold(c) = bold(x)^(-1) bold(y)$.
-
   #text(size: 6pt)[
-    $
-      bold(y) = mat(y_(-N); y_(-N+1); dots.v; y_0; dots.v; y_(N-1); y_N) quad bold(x) = mat(x_0, x_(-1), dots.h, x_(-2N); x_1, x_0, dots.h, x_(-2N+1); dots.v, dots.v, , dots.v; x_N, x_(N-1), dots.h, x_(-N); dots.v, dots.v, , dots.v; x_(2N-1), x_(2N-2), dots.h, x_(-1); x_(2N), x_(2N-1), dots.h, x_0) quad bold(c) = mat(c_(-N); c_(-N+1); dots.v; c_0; dots.v; c_(N-1); c_N)
-    $
+    #box(
+      $bold(y) = mat(y_(-N); y_(-N+1); dots.v; y_0; dots.v; y_(N-1); y_N) quad bold(x) = mat(x_0, x_(-1), dots.h, x_(-2N); x_1, x_0, dots.h, x_(-2N+1); dots.v, dots.v, , dots.v; x_N, x_(N-1), dots.h, x_(-N); dots.v, dots.v, , dots.v; x_(2N-1), x_(2N-2), dots.h, x_(-1); x_(2N), x_(2N-1), dots.h, x_0) quad bold(c) = mat(c_(-N); c_(-N+1); dots.v; c_0; dots.v; c_(N-1); c_N)$,
+    )
   ]
 
   #kp-mix-box(clr-green, [其它均衡]) #info([*最小均方误差准则*]):均方误差:$epsilon.alt^2 = 1/y_0^2 sum_(mat(k = -infinity; k != 0))^(infinity)y_k^2$使码间干扰均方误差最小,自适应均方误差#text(size: 6.9pt)[$overline(epsilon.alt^2)=E[e_k^2]=E[a_k-y_k]$] *自适应均衡*:训练/跟踪模式，单向/选择式单向均衡
@@ -411,10 +410,10 @@
   #kp-mix-box(clr-red, [TDMA]) #info([时隙])划分频率共享 #alert([$m=B_t/(B'_c N)$]) 等效信道带宽#alert([$B'_c = B_c/M_("slot")$]) $M_("slot")$为每个载波的时隙数;*同步*:位/时隙/帧同步 *定时*:延迟需要保护时间 用户提前发送
   #kp-mix-box(clr-red, [CDMA]) #info([码型])划分,时间和频率共享 #info([地址码])作*物理信道* #info([码号])作*用户地址* #alert([*干扰受限系统*]):#success([容量主要受限于系统内移动台的相互干扰]),N可为1,#info([基于DS]) #alert([$C/I = (E_b "/" I_0)/(W "/" R_b)$]) $E_b$:信息处比特能量 $I_0$:干扰功率谱密度 $W$:总频带宽度 $R_b$:信息比特速率.*单小区*:#alert([$m = 1 + I/C$]) ($C/I = 1/(m-1)$)话音占空比($d=0.35$)和扇形分区系数(3扇区$G=2.55$);*多小区*:信道复用效率($F=0.6$)修正$m "GF"/d$,*问题*:多址干扰(地址码非完美相关性);远近效应(强信号对弱信号明显抑制)*解决*:多用户接收机/功率控制/分布式天线系统
 
-  #kp-mix-box(clr-green, [GSM结构]) *MS*:移动台 *BSS*:基站子系统 *NSS*:网络子系统 *OSS*:操作支持子系统 *BTS*:基站收发信台 *BSC*:基站控制器 *MSC*:移动业务交换中心 *VLR*:来访用户位置寄存器 *HLR*:归属用户位置寄存器 *AUC*:鉴权中心 *EIR*:移动设备识别寄存器 *OMC*:操作维护中心 *PSTN*:公用电话网 *ISDN*:综合业务数字网 *PDN*:公用数据网 #success([*功能*]):*MS*移动客户的设备部分;*BSS*:与MS进行通信的系统设备,主要负责完成无线发送接收和无线资源管理等功能;*NSS*:完成GSM系统的交换功能和用于用户数据与移动性管理所需的数据库功能;*OSS*:对整个GSM网络进行管理和监控
   #image("figures/GSM结构.pdf")
+  #kp-mix-box(clr-green, [GSM结构]) *MS*:移动台 *BSS*:基站子系统 *NSS*:网络子系统 *OSS*:操作支持子系统 *BTS*:基站收发信台 *BSC*:基站控制器 *MSC*:移动业务交换中心 *VLR*:来访用户位置寄存器 *HLR*:归属用户位置寄存器 *AUC*:鉴权中心 *EIR*:移动设备识别寄存器 *OMC*:操作维护中心 *PSTN*:公用电话网 *ISDN*:综合业务数字网 *PDN*:公用数据网 #success([*功能*]):*MS*移动客户的设备部分;*BSS*:与MS进行通信的系统设备,主要负责完成无线发送接收和无线资源管理等功能;*NSS*:完成GSM系统的交换功能和用于用户数据与移动性管理所需的数据库功能;*OSS*:对整个GSM网络进行管理和监控
 
-  #kp-mix-box(clr-green, [信道]) *物理信道*:用来传送信号或数据的物理通路,每个载频上支持的一个时隙(TS)就是一个物理信道;*逻辑信道*:物理信道上所传输的内容.根据物理信道所传输的信息种类的不同可定义不同的逻辑信道:#alert([业务信道(TCH)和控制信道]);根据所需完成的功能,#success([控制信道])又分为:#alert([广播信道BCH,公共控制信道CCCH,专用控制信道DCCH]); *BCH*:频率校正(FC)同步(S)广播控制(BC);*CCCH*:寻呼(P)随机接入(RA)允许接入(AG)*DCCH*:独立专用控制(SDC)慢速辅助控制(SAC)快速辅助控制(FAC)*TCH*:全/半/增强型全速率
+  #kp-mix-box(clr-green, [信道]) *物理信道*:用来传送信号或数据的物理通路,每个载频上支持的一个时隙(TS)就是一个物理信道;*逻辑信道*:物理信道上所传输的内容.根据物理信道所传输的信息种类的不同可定义不同的逻辑信道:#alert([业务信道(TCH)和控制信道]);根据所需完成的功能,#success([控制信道])又分为:#alert([广播信道BCH,公共控制信道CCCH,专用控制信道DCCH]); *BCH*(下行):频率校正(FC)同步(S)广播控制(BC);*CCCH*:寻呼(P下行点对多)随机接入(RA上行点对点)允许接入(AG下行点对点)*DCCH*(点对点双向):独立专用控制(SDC)慢速辅助控制(SAC)快速辅助控制(FAC)*TCH*:全/半/增强型全速率
 
   #text(size: 6.3pt)[#par(
     leading: 0.5em,
@@ -445,7 +444,7 @@
   ]]
 
   #text(size: 6.9pt)[#par(
-    leading: 0.5em,
+    leading: 0.4em,
   )[
     #kp-mix-box(clr-blue, [位置更新]) #success([*概念*]):在MS的实时位置信息已知的情况下更新位置数据库(VLR,HLR)和认证移动台(MS从一个LA到另一个LA#info([强制登记]) ;一旦MS发现SIM卡中LAI和收到的LAI发生变化就执行登记),位置更新总是由MS启动;*强制登记*:周期性登记,越区位置登记
     #kp-mix-box(clr-blue, [越区位置登记]) *不同MSC/VLR业务区*:MS越区移动,发现需要进行位置更新;MS通过BSC向MSC2发送位置更新请求;MSC2将IMSI/号码/位置等信息发送给HLR;HLR返回响应消息,然后VLR2注册客户信息,同时MSC2向MS发送位置更新确认,MS确认后更新SIM卡中LAI;最后HLR通知VLR1删除已经离开的MS相关信息;*同MSC/VLR不同LA*:MS发现需要位置更新,通过新的BS将更新消息发送给MSC;MSC得知仍然属于本业务区,通知HLR,得到确认信息后VLR修改客户数据,向MS发送更新确认
@@ -454,15 +453,16 @@
 
 
   #text(size: 6.4pt)[#par(
-    leading: 0.5em,
+    leading: 0.4em,
   )[#kp-mix-box(clr-blue, [越区切换]) *GSM硬切换*:在切换过程中会发生短时中断(CDMA软);*切换方式*:移动台辅助的切换;*切换触发准则*:具有滞后余量和门限规定的相对信号强度准则;*切换阶段*:测量和目标小区确定$->$切换触发$->$切换执行#kp-mix-box(clr-purple, [切换流程]) *同BSC控制区不同cell*:MS向BSC汇报原5基站和周围基站信号强度;BSC发出切换命令;MS切换到新TCH信道并通知BSC;BSC通知MSC/VLR该MS完成切换;如位置改变需要进行位置更新.*同MSC业务区不同BSC*:MS$->$BSC1$->$MSC$->$BSC2$->$MSC$->$BSC1$->$MS$->$BSC2$->$MSC$->$BSC1$->$MSC(LA更新).*不同MSC*:MS$->$BSC1$->$MSC1$->$MSC1和MSC2建立连接并发出切换命令,MS完成切换$->$BSC2$->$MSC2(HON号码)$->$MSC1]]
 
-  #text(size: 6.5pt)[#par(
-    leading: 0.5em,
-  )[#kp-mix-box(clr-purple, [5G]) *优势*:峰值速率1G到10G;体验速率10M到100M;频谱效率提高3倍;支持移动性350km/h到500;时延10ms到1ms;没平方公里连接数10万到100万;网络能效提升100倍;区域流量0.1M$"bps/"m^2$到10M;*技术*:大规模天线,新型多址,超密集组网,高频段通信;全双工;FBMC;灵活双工;新型调制编码;D2D;频谱共享
+  #text(size: 6pt)[#par(
+    leading: 0.4em,
+  )[
+    #kp-mix-box(clr-purple, [5G]) *优势*:峰值速率1G到10G;体验速率10M到100M;频谱效率提高3倍;支持移动性350km/h到500;时延10ms到1ms;没平方公里连接数10万到100万;网络能效提升100倍;区域流量0.1M$"bps/"m^2$到10M;*技术*:大规模天线,新型多址,超密集组网,高频段通信;全双工;FBMC;灵活双工;新型调制编码;D2D;频谱共享
     #kp-mix-box(clr-purple, [核心频段]) *HF*(短波/高频)$->$*VHF*(超短/甚高)30\~300MHz$->$*UHF*:(分米波/超高频)0.3\~3GHz,1m\~10cm(蜂窝移动核心,4G/5G低频)$->$*SHF*(厘米/特高)(5G厘米波/WIFI)$->$*EHF*(毫米波/极高频)(5G毫米波/6G)
-    #kp-mix-box(clr-purple, [信道估计]) 块状导频频率上连续,梳状导频时间上连续.峰均比 PA PR $"PAPR" = max(|s(t)|^2) / E(|s(t)|^2)$,当子载波数 $N$ 很大时时域信号近似服从高斯分布.抑制 PAPR 核心方法对比:限幅限制峰值附近信号幅度,实现简单但破坏正交性,且带外干扰;编码增加冗余,选择小PAPR码字,无失真但谱效降低且复杂度高；加扰用扰码降低信号同相叠加概率,无失真但需要额外信息且复杂度高;预失真进入放大器之前预先补偿失真,让放大之后无失真,本质没有抑制PAPR,补偿程度有限.
-    #kp-mix-box(clr-purple, [各代系统信道编码]) 检错基本都用CRC *GSM/IS-95*:卷积码*3G*:话音卷积码,数据卷积/turbo码*4G*:话音卷积码,数据:卷积/turbo/LDPC码*5G*:长码LDPC码,短码Polar码
+    #kp-mix-box(clr-purple, [信道估计]) 块状导频频率上连续,梳状导频时间上连续.峰均比 PAPR,当子载波数 $N$ 很大时时域信号近似服从高斯分布.抑制 PAPR 核心方法对比:限幅限制峰值附近信号幅度,实现简单但破坏正交性,且带外干扰;编码增加冗余,选择小PAPR码字,无失真但谱效降低且复杂度高；加扰用扰码降低信号同相叠加概率,无失真但需要额外信息且复杂度高;预失真进入放大器之前预先补偿失真,让放大之后无失真,本质没有抑制PAPR,补偿程度有限.#kp-mix-box(clr-purple, [各代系统信道编码]) 检错基本都用CRC *GSM/IS-95*:卷积码*3G*:话音卷积码,数据卷积/turbo码*4G*:话音卷积码,数据:卷积/turbo/LDPC码*5G*:长码LDPC码,短码Polar码
+    #kp-mix-box(clr-purple, [数据存储]) #success([*GSM编号*]):*移动台识别与编号*:国际移动用户识别码IMSI,临时移动用户识别码TMSI,国际移动设备识别码IMEI,移动用户的ISDN号码MSISD N,移动用户漫游号码MSRN,切换号码HON;*位置区和基站的识别*:位置区识别LAI,全球小区识别码CGI,基站识别码BSIC;*MSC/VLR和HLR的识别*:MSC/VLR号码,HLR/AUC号码;#success([*SIM*])*固定*:IMSI,MSISDN, PIN,$K_i$,A3,A8;*动态*:TMSI,LAI,鉴权三参数#success([*移动设备ME*]):IMEI,A5#success([*本地HLR*]):#info([本区域注册的用户数据:]) *移动用户基本/永久数据*:IMSI,MSISDN(含本地HLR地址信息)*从VLR得移动用户当前信息*:用户当前VLR地址,用户其他数据*从AUC获取动态鉴权三参数组*#success([*本地的AUC*])$K_i,K_c$,其他加密算法A3/5/8 #success([*本地EIR*]):IMEI #success([*SIM卡任意激活地的VLR*]) #info([当前本区域内激活用户的数据:])*每用户固定数据*:IMSI*每用户临时数据*:TMSI,LAI,MSRN(包含当前VLR地址信息)
   ]]
 
   // #kp-mix-box(clr-purple, [切换流程]) *同BSC控制区不同cell*:MS向BSC汇报原5基站和周围基站信号强度;BSC发出切换命令;MS切换到新TCH信道并通知BSC;BSC通知MSC/VLR该MS完成切换;如位置改变需要进行位置更新.*同MSC业务区不同BSC*:MS$->$BSC1$->$MSC$->$BSC2$->$MSC$->$BSC1$->$MS$->$BSC2$->$MSC$->$BSC1$->$MSC(LA更新).*不同MSC*:MS$->$BSC1$->$MSC1$->$MSC1和MSC2建立连接并发出切换命令,MS完成切换$->$BSC2$->$MSC2(HON号码)$->$MSC1
