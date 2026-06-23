@@ -416,4 +416,13 @@
   #kp-mix-box(my-blue, [动态范围]) 一般是电平/功率比 #info([*线性*])：$"DR"_L = P_("in","1dB") - F_t (P_("in","min"))$ #info([*无杂散*])：下限和前面相同，上限是输出端产生的三阶互调输出折合到输入端等于基底噪声($F_t = (P_("o3"))/G_p$)$"DR"_f("dB") = 1/3 [2"IIP"_3 ("dBm") + F_t ("dBm")] - [F_t ("dBm") + "SNR"_o ("dB")]$
 
   #kp-mix-box(my-red, [链路分析]) #common([*增益*])：由前向后的原则，注意$L = -G_p$(分贝)；#info([*噪声系数*])：由后向前的原则，#success([无源器件噪声系数等于其插入损耗]),使用级联计算公式；#alert([*三阶截断点*])：#info([由后向前])的原则
+
+  #kp-mix-box(my-green, [滤波器指标]) #common([*插入损耗*])：$"IL" = 10 lg P_("av")/P_L=-20 lg |S_21|$,对于无损网络$"IL" = 10 lg P_("in")/P_L = -10 lg (1 - |Gamma_"in" |^2)$($P_("av")$资用功率，$P_("in")$信号源输入功率)；#common([*波纹*])：衡量带内响应平坦度；#common([*带宽*])；#common([*矩形系数*])：带通滤波器通带与阻带间过渡带宽的陡峭程度$"SF" = ("BW"_("3dB")/("BW"_("60dB")))$;#common([*品质因素*])：空载为在谐振频率下滤波器上一个周期内平均储能与功率损耗的比$Q = omega_c W_("stored")/P_("loss")$;有载$Q_L$接入负载$1/Q_L = 1/Q + 1/Q_E$(外部品质因素),$"BW"_("3dB") = f_c/Q_L$
+
+  #kp-mix-box(my-red, [低通滤波器原型]) #alert([*巴特沃斯*])：$"IL" = 10 lg(1 + a^2 Omega^(2N))$,#success([归一化频率])$Omega = omega/omega_c$,$omega_c$为截止频率,N为滤波器阶数,a取1时$Omega=1$是3dB损耗点；#alert([*切比雪夫*])：$I L = 10 log([1 + a^2 T_"N"^2(Omega)])$,$T_"N" (Omega) = cos({N [cos^(-1)(Omega)]})|Omega| <= 1$,$T_"N" (Omega) = cosh({N [cosh^(-1)(Omega)]}) |Omega| >= 1$,这里a是波纹幅度调节因子$a^2 = 10^("RP"_"IL" \/ 10) - 1$,$"RP"_"IL"$是波纹峰值(dB)；#common([*原型电路*])：$g_0$第一个元件是并联电容则表示电阻，串联电感则表示电导；$g_(N + 1)=1$负载看最后一个元件决定电阻/电导
+  #image("figures/原型电路.png")
+
+  #kp-mix-box(my-blue, [频率变换]) #common([*低通*])：$omega = Omega omega_c$,$L' = L/omega_c$,$C' = C/omega_c$;#common([*高通*])：$omega = - omega_c/Omega$,$C' = 1/(omega_c L)$,$L' = 1/(omega_c C)$(电容电感互换);#common([*带通*])：$Omega = ((omega_0) / (omega_U - omega_L))((omega) / (omega_0) - (omega_0) / (omega))$,中心频率$omega_0^2 = omega_U omega_L$;#success([串联电感])$L' = L/(omega_U - omega_L)$,$C' = (omega_U - omega_L)/(omega_0^2 L)$(LC串联谐振)；#success([并联电容])$L' = (omega_U - omega_L)/(omega_0^2 C)$,$C' = C/(omega_U - omega_L)$(LC并联谐振)；#common([*带阻*])：$Omega = {(-omega_0) / (omega_U - omega_L)((omega) / (omega_0) - (omega_0) / (omega))}^(-1)$,$omega_0^2 = omega_U omega_L$；#success([串联电感])$L' = (omega_U - omega_L)/(omega_0^2) L$,$C' = 1/((omega_U - omega_L)L)$(并联LC谐振)；#success([并联电容])：$L' = 1/((omega_U - omega_L)C)$,$C' = (omega_U - omega_L)/(omega_0^2) C$(串联LC谐振)
+
+  #kp-mix-box(my-blue, [阻抗变换]) 阻抗变换之前用的都是归一化的源电阻，源阻抗为$R_G$时，$R_G ' = R_G$,$L' = L R_G$,$C' = C/R_G$,$R_L ' = R_L R_G$
 ] 
