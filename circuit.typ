@@ -210,7 +210,7 @@
     inset: 0pt,
     outset: 0pt,
     [
-      #image("figures/射频放大器设计.png")
+      #image("figures/射频放大器设计-重绘.png")
     ],
   ),
 )
@@ -246,7 +246,7 @@
     inset: 0pt,
     outset: 0pt,
     [
-      #image("figures/Hartley频域.png")
+      #image("figures/Hartley频域-重绘.png")
     ],
   ),
 )
@@ -264,7 +264,7 @@
     inset: 0pt,
     outset: 0pt,
     [
-      #box(image("figures/等效电路.png"))
+      #box(image("figures/等效电路-重绘.png"))
     ],
   ),
 )
@@ -287,7 +287,7 @@
 
   #kp-mix-box(my-green, [通信系统组成]) 频谱/功率/效率，灵敏度/选择性
   #image("figures/通信系统结构.pdf")
-  #image("figures/接收发射合并.png")
+  #image("figures/接收发射合并-重绘.png")
   #success([设计要求])：良好的选择性；低噪声、高动态范围；接收机对于杂散频率有良好的抑制能力；本振信号应该具有很低的相位噪声；发射机必须严格限制带外辐射；射频级必须低功耗；发射机功放要求有高的功率增加效率
 
   #kp-mix-box(my-purple, [发展趋势]) 高频率化；高速率化；集成化和小型化；低功耗；数字化/智能化；低价与人性化
@@ -341,7 +341,7 @@
   #kp-mix-box(my-blue, [混合参量]) $mat(v_1; i_2) = mat(H_11, H_12; H_21, H_22) mat(i_1; v_2)$,$H_11 = v_1/i_1 |_(v_2 = 0)$输入阻抗,$H_12 = v_1/v_2 |_(i_1 = 0)$反向电压增益,$H_21 = i_2/i_1 |_(v_2 = 0)$正向电流增益,$H_22 = i_2/v_2 |_(i_1 = 0)$输出导纳
 
   #kp-mix-box(my-red, [S参量]) 功率$P = 1/2 [ |a|^2 - |b|^2]$ #info([*归一化入射/反射电压波*])$a_n = (V_n + Z_0 I_n)/(2sqrt(Z_0))=V_n^+/sqrt(Z_0)=sqrt(Z_0) I_n^+$,$b_n = (V_n - Z_0 I_n)/(2sqrt(Z_0)) = V_n^-/sqrt(Z_0) = -sqrt(Z_0)I_n^-$;$V_n = sqrt(Z_0)(a_n + b_n)$,$I_n = (a_n - b_n)/sqrt(Z_0)$;$V_n = V_n^+ + V_n^- = Z_0 I_n^+ - Z_0 I_n^-$ #alert([*定义*])：$mat(b_1; b_2) = mat(S_11, S_12; S_21, S_22)mat(a_1; a_2)$,$S_11 = b_1/a_1 |_(a_2 = 0)$,$S_21 = b_2/a_1 |_(a_2 = 0)$,$S_22 = b_2/a_2 |_(a_1 = 0)$,$S_12 = b_1/a_2 |_(a_1 = 0)$,定义式中#success([要求两个端口没有功率波返回])，只有#alert([两端传输线匹配])才成立
-  #image("figures/S网络.png")
+  #image("figures/S网络-重绘.png")
   #alert([*物理意义*]):$S_11 = Gamma_("in") = (Z_("in") - Z_0)/(Z_("in") + Z_0)$回波损耗$R L = -20 log |S_11|$;$S_21 = (2V_2^-)/V_("G1") = (2V_2)/V_("G1")$($S_11 = 0$)端口1向端口2的正向电压增益，平方后功率增益$G_0 = |S_21|^2$;$S_22 = Gamma_("out") = (Z_("out")-Z_0)/(Z_("out")+ Z_0)$；$S_12 = (2V_1^-)/V_("G2") = 2V_1 / V_("G2")$($S_22 = 0$)端口2向端口1的反向电压增益；#common([*传输线上*])：$mat(0, e^(-gamma l); e^(-gamma l), 0)$；#common([*与Z矩阵*])：$[Z] = Z_0 ([I] + [S])([I] - [S])^(-1)$,$[S] = ([z] - [I])([z] + [I])^(-1)$,$[Z]=[z] dot Z_0$
 
   #kp-mix-box(my-purple, [链形散射]) $mat(a_1; b_1) = mat(T_11, T_12; T_21, T_22)mat(b_2; a_2)$,级联时$bold(T) = bold(T)^A bold(T)^B$；$T = 1/S_21 mat(1, -S_22; S_11, -Delta S)$,$S = 1/T_11 mat(T_21, -Delta T; 1, -T_12)$
