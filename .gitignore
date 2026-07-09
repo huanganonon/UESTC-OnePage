@@ -1,6 +1,9 @@
 # 先忽略所有 PDF
 *.pdf
 
-# 但保留 figures 目录下的 PDF
+# 保留 figures 目录下的 PDF
 !figures/*.pdf
 !figures/**/*.pdf
+
+# 保留 doc 目录下的演示 PDF
+!doc/*.pdf
