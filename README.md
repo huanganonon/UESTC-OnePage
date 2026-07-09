@@ -7,6 +7,8 @@
 
 ![show](https://pub-0e8efcc4330948248cee44d22f062746.r2.dev/PicGo/20260709122308334.png)
 
+![](https://pub-0e8efcc4330948248cee44d22f062746.r2.dev/PicGo/20260709165806286.png)
+
 # 配置说明
 
 > 可以参考`circuit.typ`的配置内容，这是目前我最后完成的一个一页纸
