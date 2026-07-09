@@ -51,7 +51,7 @@
     "Microsoft YaHei",
     "SimHei",
   ),
-  size: 7.5pt,
+  size: 7.9pt,
   hyphenate: true,
   costs: (hyphenation: 100%, runt: 0%, widow: 0%, orphan: 0%),
   tracking: -0.5pt, // ! 字符间距，谨慎调整：注意字体本身就内含了间距，所以调整为负不会导致字重合
@@ -66,7 +66,7 @@
 // ========== 其他样式设定(如颜色、行距等) ==========
 #set par(
   leading: 0.7em, // 行距
-  spacing: 0.65em, // 段间距
+  spacing: 0.7em, // 段间距
 )
 
 // 强行压缩独立公式块的上下外边距，默认值较大，改为 0.4em 甚至更低
@@ -78,7 +78,8 @@
 // 让行内公式里的文字挨得更紧凑
 #show math.equation.where(block: false): set text(tracking: -0.5pt)
 
-
+// 设置方括号矩阵
+#set math.mat(delim: "[")
 
 
 // 替换符号，减少空间占用
@@ -95,18 +96,48 @@
 #show math.eq.not: it => math.class("normal", it)
 #show math.arrow.double: it => math.class("normal", it)
 #show math.arrow.l.r.double: it => math.class("normal", it)
+#show math.bar.v: it => math.class("normal", it)
+#show math.angle: it => math.class("normal", it)
+
+// 自动将全角标点替换为半角标点
+#show regex("[，。？！、：；（）「」【】]"): it => {
+  let mapping = (
+    "，": ",",
+    "。": ".",
+    "？": "?",
+    "！": "!",
+    "、": ",",
+    "：": ":",
+    "；": ";",
+    "（": "(",
+    "）": ")",
+    "「": "[",
+    "」": "]",
+    "【": "[",
+    "】": "]",
+  )
+  mapping.at(it.text, default: it.text)
+}
 
 
 
-// 定义颜色常量（方便后续统一修改）
-#let my-red = rgb("#d9383a")
-#let my-blue = rgb("#2b6cb0")
-#let my-green = rgb("#38a169")
+// ==================== 打印级颜色核心配置 ====================
+// 级别 1：【核心必考 / 超级公式】 - 高警示度朱红色（红偏橘，考场上第一眼看到）
+#let my-red = rgb("d32f2f")
+// 级别 2：【高频考点 / 核心概念】 - 深邃湖蓝色（理智、清晰，适合大段核心知识点）
+#let my-blue = rgb("0288d1")
+// 级别 3：【次要考点 / 补充定义】 - 稳重橄榄绿（不刺眼，用于区分常规概念）
+#let my-green = rgb("388e3c")
+// 级别 4：【普通标记 / 题型分类】 - 暗夜紫罗兰（低调但有高对比度，适合分类标签）
+#let my-purple = rgb("7b1fa2")
+// =========================================================
 
 // 定义快速调用的函数
-#let alert(content) = text(fill: my-red, [#content])
+#let alert(content) = text(fill: my-red, content)
 #let info(content) = text(fill: my-blue, content)
 #let success(content) = text(fill: my-green, content)
+#let common(content) = text(fill: my-purple, content)
+
 
 // 配置考点框
 #let kp-mix-box(clr, body) = box(
@@ -125,19 +156,19 @@
 )
 
 
-// ==================== 打印级颜色核心配置 ====================
-// 级别 1：【核心必考 / 超级公式】 - 高警示度朱红色（红偏橘，考场上第一眼看到）
-#let clr-red = rgb("d32f2f")
+// // ==================== 打印级颜色核心配置 ====================
+// // 级别 1：【核心必考 / 超级公式】 - 高警示度朱红色（红偏橘，考场上第一眼看到）
+// #let clr-red = rgb("d32f2f")
 
-// 级别 2：【高频考点 / 核心概念】 - 深邃湖蓝色（理智、清晰，适合大段核心知识点）
-#let clr-blue = rgb("0288d1")
+// // 级别 2：【高频考点 / 核心概念】 - 深邃湖蓝色（理智、清晰，适合大段核心知识点）
+// #let clr-blue = rgb("0288d1")
 
-// 级别 3：【次要考点 / 补充定义】 - 稳重橄榄绿（不刺眼，用于区分常规概念）
-#let clr-green = rgb("388e3c")
+// // 级别 3：【次要考点 / 补充定义】 - 稳重橄榄绿（不刺眼，用于区分常规概念）
+// #let clr-green = rgb("388e3c")
 
-// 级别 4：【普通标记 / 题型分类】 - 暗夜紫罗兰（低调但有高对比度，适合分类标签）
-#let clr-purple = rgb("7b1fa2")
-// =========================================================
+// // 级别 4：【普通标记 / 题型分类】 - 暗夜紫罗兰（低调但有高对比度，适合分类标签）
+// #let clr-purple = rgb("7b1fa2")
+// // =========================================================
 
 
 
@@ -155,7 +186,7 @@
       fill: none,
       inset: 0em,
       outset: 0em,
-      stroke: (dash: "dashed", paint: green, thickness: 0.5pt),
+      stroke: (dash: "dashed", paint: green, thickness: 1pt),
       [
         #content
       ],
@@ -175,11 +206,11 @@
     width: title-left - safe-left,
     height: name-top-up - safe-top, // 留出一点空隙
     fill: none,
-    stroke: (dash: "dashed", paint: blue, thickness: 0.4pt),
+    stroke: (dash: "dashed", paint: blue, thickness: 1pt),
     inset: 0pt,
     outset: 0pt,
     [
-      #image("figures/Viterbi.excalidraw.svg")
+      #image("figures/射频放大器设计-重绘.png")
     ],
   ),
 )
@@ -193,15 +224,11 @@
     width: title-right - title-left - 0.6mm,
     height: stamp-top - safe-top - 0.5mm, // 留出一点空隙
     fill: none,
-    stroke: (dash: "dashed", paint: purple, thickness: 0.4pt),
+    stroke: (dash: "dashed", paint: purple, thickness: 1pt),
     inset: 0pt,
     outset: 0pt,
     [
-      #text(
-        size: 6pt,
-      )[#kp-mix-box(clr-purple, [移动通信的特点]) 频谱拥挤/频谱需严格菅理;电波传播存在衰落/多径等问题;面临环境的干扰和噪声;存在高速移动和大动态范围的要求;对移动台体积/重量/功耗的要求高;系统复杂,系统需组网,网络需有越区切换/漫游等功能
-        #kp-mix-box(clr-purple, [无线电波传播方式]) *地波*(沿地球表面传播,低频/长波,传播距离远/较稳定);*天波*(靠电离层反射传播,高频/短波,用于远距离短波通信);*视距/对流层*(在对流层内沿直线或散射传播,超短波/微波,距离受视线限制);*卫星*(穿透电离层,利用卫星中继传输,微波,距离远、覆盖大)]
-
+      $e^(i theta) = cos theta + i sin theta$，$k = 1.38 times 10^(-23) J \/ K$,$Gamma = Gamma_r + j Gamma_i = |Gamma| angle theta$,$Gamma_r^2 + (Gamma_i - (1) / (Q_n))^2 = 1 + (1) / (Q_n^2) , x < 0$,$Gamma_r^2 + (Gamma_i + (1) / (Q_n))^2 = 1 + (1) / (Q_n^2) , x > 0$
     ],
   ),
 )
@@ -215,11 +242,11 @@
     width: title-left - safe-left,
     height: name-top-up - safe-top, // 留出一点空隙
     fill: none,
-    stroke: (dash: "dashed", paint: blue, thickness: 0.4pt),
+    stroke: (dash: "dashed", paint: blue, thickness: 1pt),
     inset: 0pt,
     outset: 0pt,
     [
-      #image("figures/RAKE.pdf")
+      #image("figures/Hartley频域-重绘.png")
     ],
   ),
 )
@@ -233,11 +260,11 @@
     width: seal-left,
     height: attention-top - name-top, // 留出一点空隙
     fill: none,
-    stroke: (dash: "dashed", paint: blue, thickness: 0.4pt),
+    stroke: (dash: "dashed", paint: blue, thickness: 1pt),
     inset: 0pt,
     outset: 0pt,
     [
-      #image("figures/自绘-窄带.pdf", width: 32%)
+      #box(image("figures/等效电路-重绘.png"))
     ],
   ),
 )
@@ -248,16 +275,11 @@
 
 
 
-// #place(
-//   dx: stamp-left - 10mm,
-//   dy: stamp-top - safe-top,
-// )[
-//   #rotate(90deg, origin: top + left)[
-//     #image("figures/抗窄带干扰.pdf", width: 33%)
-//   ]
-// ]
-
 // 跳过预印区,主正文从说明文字下方开始
 // !注意:这里的高度是从 safe-top 开始计算的,因为 page 的 margin 已经设置了 safe-top 了
 #block(height: stamp-bottom - safe-top)
 // 这里可以放置正文内容
+
+#columns(3, gutter: 2mm)[
+  测试内容
+]
