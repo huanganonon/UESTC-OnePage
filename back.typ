@@ -210,7 +210,7 @@
     inset: 0pt,
     outset: 0pt,
     [
-      #image("figures/射频放大器设计-重绘.png")
+      // #image("figures/射频放大器设计-重绘.png")
     ],
   ),
 )
@@ -228,7 +228,7 @@
     inset: 0pt,
     outset: 0pt,
     [
-      $e^(i theta) = cos theta + i sin theta$，$k = 1.38 times 10^(-23) J \/ K$,$Gamma = Gamma_r + j Gamma_i = |Gamma| angle theta$,$Gamma_r^2 + (Gamma_i - (1) / (Q_n))^2 = 1 + (1) / (Q_n^2) , x < 0$,$Gamma_r^2 + (Gamma_i + (1) / (Q_n))^2 = 1 + (1) / (Q_n^2) , x > 0$
+      // $e^(i theta) = cos theta + i sin theta$，$k = 1.38 times 10^(-23) J \/ K$,$Gamma = Gamma_r + j Gamma_i = |Gamma| angle theta$,$Gamma_r^2 + (Gamma_i - (1) / (Q_n))^2 = 1 + (1) / (Q_n^2) , x < 0$,$Gamma_r^2 + (Gamma_i + (1) / (Q_n))^2 = 1 + (1) / (Q_n^2) , x > 0$
     ],
   ),
 )
@@ -246,7 +246,7 @@
     inset: 0pt,
     outset: 0pt,
     [
-      #image("figures/Hartley频域-重绘.png")
+      // #image("figures/Hartley频域-重绘.png")
     ],
   ),
 )
@@ -264,7 +264,7 @@
     inset: 0pt,
     outset: 0pt,
     [
-      #box(image("figures/等效电路-重绘.png"))
+      // #box(image("figures/等效电路-重绘.png"))
     ],
   ),
 )
