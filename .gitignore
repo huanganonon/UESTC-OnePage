@@ -7,3 +7,5 @@
 
 # 保留 doc 目录下的演示 PDF
 !doc/*.pdf
+
+assets/
