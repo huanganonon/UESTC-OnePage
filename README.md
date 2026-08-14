@@ -7,7 +7,7 @@
 
 ![show](https://pub-0e8efcc4330948248cee44d22f062746.r2.dev/PicGo/20260709122308334.png)
 
-![s](https://pub-0e8efcc4330948248cee44d22f062746.r2.dev/PicGo/20260709165806286.png)
+![s](https://pub-0e8efcc4330948248cee44d22f062746.r2.dev/PicGo/PicGo_20260709165806286.png)
 
 # 配置说明
 
